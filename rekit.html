@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RE:FEEEL — RE:KIT</title>
+<link rel="preconnect" href="https://cdn.jsdelivr.net">
+<link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/gh/sun-typeface/SUIT@2/fonts/variable/woff2/SUIT-Variable.css" rel="stylesheet">
+
+<!-- ═══ 위젯0: 공용 CSS ═══ -->
+<style>
+html,body,[class*="imweb"],[class*="fullpage"],[class*="section-wrapper"]{
+  scroll-snap-type:none !important;scroll-snap-align:none !important;scroll-behavior:auto !important;
+}
+html,body{overscroll-behavior:none !important}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Pretendard Variable','Pretendard',-apple-system,sans-serif;background:#fff;color:#1a1a1a;-webkit-font-smoothing:antialiased;overflow-x:clip}
+a{text-decoration:none;color:inherit}
+button{font-family:inherit;border:none;cursor:pointer;background:none}
+:root{
+  --sub:#555;--mute:#999;--faint:#bbb;
+  --line:#e5e5e5;--hover:#fafafa;
+  --pad:48px;
+  --tag-bg:rgba(0,0,0,0.04);
+  --home-border:rgba(0,0,0,0.07);
+  --home-btn-border:rgba(0,0,0,0.12);
+  --cat-marketing:#6465F5;
+  --cat-branding:#e75519;
+  --cat-content:#f5ca43;
+}
+.rk-inner{max-width:1200px;margin:0 auto;overflow:visible}
+.rk-sec-title{font-size:34px;font-weight:800;letter-spacing:-.03em;line-height:1.3}
+.rk-sec-sub{font-size:14px;font-weight:500;color:var(--mute);margin-left:10px}
+.rf-kc-dot{width:20px;height:20px;border-radius:50%;flex-shrink:0;display:inline-flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:#fff;letter-spacing:0;text-transform:uppercase}
+.rf-kc-dot.mk{background:#6465f5}
+.rf-kc-dot.br{background:#e75519}
+.rf-kc-dot.ct{background:#f5ca43}
+.tab-panel{display:none}
+.tab-panel.show{display:block}
+@media(max-width:767px){:root{--pad:24px}}
+</style>
+
+<!-- ═══ 위젯1: 헤더 + 탭 내비 CSS ═══ -->
+<style>
+.rk-hd{background:#111;color:#fff;padding:220px var(--pad) 72px}
+.rk-hd-inner{max-width:1200px;margin:0 auto}
+.rk-hd-label{font-family:'SUIT Variable',sans-serif;font-size:10px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:#e75519;margin-bottom:20px}
+.rk-hd-brand{font-family:'SUIT Variable',sans-serif;font-size:clamp(36px,5vw,52px);font-weight:800;letter-spacing:-1px;line-height:1;margin-bottom:12px}
+.rk-hd-copy{font-size:15px;font-weight:400;color:#b7b7b7;line-height:1.6;max-width:400px}
+.rk-tabs-nav{background:#111;padding:0 var(--pad);position:sticky;top:0;z-index:100;transition:background .3s}
+.rk-tabs-nav.rk-tabs-light{background:#fff;border-bottom:1px solid #e5e5e5}
+.rk-tabs-nav.rk-tabs-light .rk-tabs-nav-inner{border-bottom:none}
+.rk-tabs-nav.rk-tabs-light .rk-tabs-btn{color:rgba(0,0,0,.3)}
+.rk-tabs-nav.rk-tabs-light .rk-tabs-btn:hover{color:rgba(0,0,0,.6)}
+.rk-tabs-nav.rk-tabs-light .rk-tabs-btn.on{color:#1a1a1a}
+.rk-tabs-nav-inner{max-width:1200px;margin:0 auto;display:flex;gap:0;border-bottom:1px solid rgba(255,255,255,.08)}
+.rk-tabs-btn{padding:14px 20px 16px;font-size:16px;font-weight:700;color:rgba(183,183,183,.45);letter-spacing:-.02em;position:relative;transition:color .2s}
+.rk-tabs-btn:hover{color:#b7b7b7}
+.rk-tabs-btn.on{color:#fff}
+.rk-tabs-btn.on::after{content:'';position:absolute;bottom:-1px;left:20px;right:20px;height:2.5px;background:#e75519}
+@media(max-width:767px){
+  .rk-hd{padding:85px 20px 56px}
+  .rk-hd-brand{font-size:32px}
+}
+</style>
+
+<!-- ═══ 위젯2: 큐레이션 탭 CSS ═══ -->
+<style>
+.rk-new{padding:64px 0 0;overflow:visible}
+.rk-new-inner{max-width:1120px;margin:0 auto;padding:0 clamp(20px,5vw,64px)}
+.rk-pk-track{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch;padding:0 0 8px;scrollbar-width:none}
+.rk-pk-track::-webkit-scrollbar{display:none}
+.pk-card{flex:0 0 380px;scroll-snap-align:start;border-radius:0;overflow:hidden;position:relative;cursor:pointer;aspect-ratio:4/3;background:#1a1a1a;display:block}
+.pk-card:hover{opacity:.9}
+.pk-card::after{content:'';position:absolute;inset:0;background:linear-gradient(to bottom,rgba(0,0,0,.15) 0%,rgba(0,0,0,.1) 20%,rgba(0,0,0,.5) 55%,rgba(0,0,0,.85) 100%);z-index:1}
+.pk-card-bg{position:absolute;inset:0}
+.pk-card-bg img{width:100%;height:100%;object-fit:cover}
+.pk-card-inner{position:absolute;inset:0;z-index:2;display:flex;flex-direction:column;justify-content:space-between;padding:22px;color:#fff}
+.pk-card-top{display:flex;align-items:flex-start;justify-content:space-between}
+.pk-card-num{font-family:'SUIT Variable',sans-serif;font-size:28px;font-weight:700;letter-spacing:1px}
+.pk-badge{font-size:9px;font-weight:800;letter-spacing:1px;padding:4px 10px;line-height:1}
+.pk-badge.free{background:none;color:#e75519;font-size:9px;font-weight:700;letter-spacing:.5px;padding:0}
+.pk-card-cat{display:inline-block;font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:2px 6px;border-radius:100px;border:1px solid rgba(255,255,255,.3);margin-bottom:4px}
+.pk-card-title{font-size:18px;font-weight:700;line-height:1.35;letter-spacing:-.02em;margin-bottom:2px}
+.pk-card-desc{font-size:12px;line-height:1.4;opacity:.6;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.pk-card-kw{font-family:'SUIT Variable',sans-serif;font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;opacity:.35;margin-top:10px}
+.rk-cur-sec{background:#fff;padding:80px 0 0}
+.rk-cur-sec-inner{max-width:1120px;margin:0 auto;padding:0 clamp(20px,5vw,64px)}
+.rk-cur-block{margin-bottom:80px}
+.rk-cur-block:last-child{margin-bottom:0}
+.rk-cur-block-head{display:flex;align-items:baseline;gap:10px;margin-bottom:24px}
+.rk-cur-block-title{font-size:34px;font-weight:800;letter-spacing:-.03em;color:#111;line-height:1.3;word-break:keep-all}
+.rk-cur-block-count{font-size:14px;font-weight:500;color:var(--mute)}
+.rk-cur-track{display:flex;gap:0;overflow-x:auto;scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.rk-cur-track::-webkit-scrollbar{display:none}
+.rf-kc{flex:0 0 260px;scroll-snap-align:start;background:#fff;border-right:1px solid rgba(0,0,0,.07);cursor:pointer;display:flex;flex-direction:column;padding:20px;min-height:250px}
+.rf-kc-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px}
+.rf-kc-num{font-size:13px;font-weight:600;color:#bbb}
+.rf-kc-title{font-size:17px;font-weight:800;color:#111;line-height:1.4;letter-spacing:-.02em;word-break:keep-all;margin-bottom:10px}
+.rf-kc-desc{font-size:13px;color:#888;line-height:1.6;word-break:keep-all}
+.rf-kc-foot{margin-top:auto;padding-top:20px;display:flex;justify-content:space-between;align-items:center;gap:8px;overflow:hidden}
+.rf-kc-cat-tag{display:flex;align-items:center;gap:8px;flex-shrink:0}
+.rf-kc-cat-label{font-size:12px;font-weight:500;color:#888}
+.rf-kc-kw{font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#bbb;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.rf-kc:last-child{border-right:none}
+.rf-kc-free{font-size:9px;font-weight:500;color:#e75519;letter-spacing:.5px}
+.rf-kc.rf-kc-img{position:relative;padding:0;overflow:hidden;background:#f5f4f2;border-right:1px solid rgba(0,0,0,.07)}
+.rf-kc-img-bg{position:absolute;inset:0;z-index:0}
+.rf-kc-img-bg img{width:100%;height:100%;object-fit:cover;display:block}
+.rf-kc-img-bg::after{content:'';position:absolute;inset:0;background:linear-gradient(to bottom,rgba(0,0,0,.25) 0%,rgba(0,0,0,.15) 30%,rgba(0,0,0,.35) 60%,rgba(0,0,0,.65) 100%)}
+.rf-kc-img .rf-kc-inner{position:relative;z-index:1;padding:20px;display:flex;flex-direction:column;height:100%;min-height:250px}
+.rf-kc-img .rf-kc-num{color:rgba(255,255,255,.5)}
+.rf-kc-img .rf-kc-title{color:#fff;text-shadow:0 1px 4px rgba(0,0,0,.3)}
+.rf-kc-img .rf-kc-desc{color:rgba(255,255,255,.75);text-shadow:0 1px 3px rgba(0,0,0,.2)}
+.rf-kc-img .rf-kc-cat-label{color:rgba(255,255,255,.6)}
+.rf-kc-img .rf-kc-kw{color:rgba(255,255,255,.4)}
+.rf-kc-img .rf-kc-free{color:#e75519}
+.rk-thumblist{}
+.rk-thumbrow{display:flex;align-items:center;gap:16px;padding:20px 0;border-bottom:1px solid var(--line);cursor:pointer;transition:opacity .15s;color:inherit;text-decoration:none}
+.rk-thumbrow:first-child{border-top:none}
+.rk-thumbrow:hover{opacity:.7}
+.rk-thumbrow-img{width:80px;height:80px;overflow:hidden;flex-shrink:0;background:var(--tag-bg);position:relative}
+.rk-thumbrow-img img{width:100%;height:100%;object-fit:cover}
+.rk-thumbrow-img::after{content:'';position:absolute;inset:0;background:rgba(0,0,0,.25)}
+.rk-thumbrow-num{position:absolute;inset:0;z-index:1;display:flex;align-items:center;justify-content:center;font-family:'SUIT Variable',sans-serif;font-size:22px;font-weight:700;color:#fff;letter-spacing:-1px}
+.rk-thumbrow-body{flex:1;min-width:0}
+.rk-thumbrow-title{font-size:16px;font-weight:700;color:#1a1a1a;line-height:1.4;letter-spacing:-.02em;margin-bottom:3px;word-break:keep-all}
+.rk-thumbrow-desc{font-size:12px;color:var(--mute);line-height:1.4;display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden;margin-bottom:6px}
+.rk-thumbrow-meta{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--mute)}
+.rk-thumbrow-kw{font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--faint);margin-left:auto}
+.rk-bigtrack{display:flex;gap:16px;overflow-x:auto;scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.rk-bigtrack::-webkit-scrollbar{display:none}
+.rk-bigcard{flex:0 0 280px;scroll-snap-align:start;cursor:pointer;padding:0 0 16px;transition:opacity .15s;overflow:hidden;background:#fff;display:block;color:inherit;text-decoration:none}
+.rk-bigcard:hover{opacity:.8}
+.rk-bigcard-img{width:100%;height:140px;overflow:hidden;margin-bottom:14px;background:var(--tag-bg);position:relative}
+.rk-bigcard-img img{width:100%;height:100%;object-fit:cover}
+.rk-bigcard-overlay{position:absolute;top:10px;left:10px;display:flex;align-items:center;gap:6px;font-size:11px;font-weight:600;color:#fff;text-shadow:0 1px 3px rgba(0,0,0,.4)}
+.rk-bigcard-body{padding:0 16px}
+.rk-bigcard-meta{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--mute);margin-bottom:8px}
+.rk-bigcard-num{font-size:11px;color:var(--faint)}
+.rk-bigcard-title{font-size:16px;font-weight:700;color:#1a1a1a;line-height:1.4;letter-spacing:-.02em;word-break:keep-all;margin-bottom:4px}
+.rk-bigcard-desc{font-size:12px;color:var(--mute);line-height:1.5;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.rk-grid-wrap{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.rk-gridcard{display:block;cursor:pointer;transition:opacity .15s;overflow:hidden;background:#fff;color:inherit;text-decoration:none}
+.rk-gridcard:hover{opacity:.8}
+.rk-gridcard-img{width:100%;padding-bottom:56.25%;position:relative;overflow:hidden;background:#eee}
+.rk-gridcard-img img{position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;display:block}
+.rk-gridcard-overlay{position:absolute;top:10px;left:10px;z-index:1;display:flex;align-items:center;gap:6px;font-size:11px;font-weight:600;color:#fff;text-shadow:0 1px 3px rgba(0,0,0,.5)}
+.rk-gridcard-body{padding:12px 0 0}
+.rk-gridcard-num{font-size:11px;color:#999;margin-bottom:6px}
+.rk-gridcard-title{font-size:15px;font-weight:700;color:#1a1a1a;line-height:1.4}
+.rk-gridcard-desc{font-size:12px;color:#999;margin-top:4px}
+.rk-cta{background:#111;padding:72px 0;width:100%}
+.rk-cta-inner{max-width:1120px;margin:0 auto;padding:0 clamp(20px,5vw,64px);display:flex;align-items:center;justify-content:space-between;gap:32px;flex-wrap:wrap}
+.rk-cta h3{font-size:clamp(16px,1.8vw,20px);font-weight:800;color:#fff;letter-spacing:-.02em;line-height:1.5;word-break:keep-all}
+.rk-cta p{font-size:11px;color:rgba(255,255,255,.3);margin-top:6px}
+.rk-cta-btn{display:inline-flex;padding:12px 30px;background:#e75519;color:#fff;font-size:12px;font-weight:700;flex-shrink:0;transition:opacity .2s;text-decoration:none}
+.rk-cta-btn:hover{opacity:.85}
+.rk-scroll-wrap{position:relative}
+.rk-arr{position:absolute;top:50%;transform:translateY(-50%);width:auto;height:auto;background:none;border:none;box-shadow:none;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:2;outline:none;transition:opacity .2s;padding:8px}
+.rk-arr:hover{opacity:.5}
+.rk-arr.hide{opacity:0;pointer-events:none}
+.rk-arr svg{width:28px;height:28px;color:#ccc}
+.rk-arr-l{right:100%;margin-right:12px;left:auto}
+.rk-arr-r{left:100%;margin-left:12px;right:auto}
+.rk-home-end{text-align:center;padding:64px 0 100px;color:var(--faint);font-size:12px}
+@media(max-width:767px){
+  .rk-cur-block-title{font-size:26px}
+  .pk-card{flex:0 0 75vw}
+  .rf-kc{flex:0 0 220px;padding:18px;min-height:220px}
+  .rf-kc.rf-kc-img{padding:0}
+  .rf-kc-img .rf-kc-inner{padding:18px;min-height:220px}
+  .rf-kc-title{font-size:15px}
+  .rk-cur-sec-inner{padding:0 0 0 clamp(20px,5vw,64px)}
+  .rk-new-inner{padding:0 0 0 clamp(20px,5vw,64px)}
+  .rk-scroll-wrap{margin-right:0;overflow:visible}
+  .rk-pk-track,.rk-cur-track,.rk-bigtrack{padding-right:20px}
+  .rk-cur-block{overflow:hidden}
+  .rk-thumblist{padding-right:clamp(20px,5vw,64px)}
+  .rk-grid-wrap{padding-right:clamp(20px,5vw,64px)}
+  .rk-cta-inner{flex-direction:column;text-align:center;align-items:center}
+  .rk-thumbrow-img{width:64px;height:64px}
+  .rk-thumbrow-title{font-size:14px}
+  .rk-bigcard{flex:0 0 220px}
+  .rk-bigcard-img{height:110px}
+  .rk-arr{display:none}
+  .rk-grid-wrap{grid-template-columns:1fr 1fr;gap:12px}
+  .rk-gridcard-title{font-size:13px}
+}
+</style>
+
+<!-- ═══ 위젯3: 탐색 탭 CSS ═══ -->
+<style>
+.rk-explore{max-width:1200px;margin:0 auto;padding:40px var(--pad) 100px}
+.rk-explore-search{position:relative;margin-bottom:24px}
+.rk-explore-search input{width:100%;padding:14px 0 14px 36px;border:none;border-bottom:2px solid var(--home-border);background:transparent;font-family:inherit;font-size:16px;font-weight:500;color:inherit;outline:none;transition:border-color .2s}
+.rk-explore-search input:focus{border-color:#1a1a1a}
+.rk-explore-search input::placeholder{color:var(--faint);font-weight:400}
+.rk-explore-search svg{position:absolute;left:0;top:50%;transform:translateY(-50%);width:20px;height:20px;color:var(--mute);fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.rk-toolbar{display:flex;flex-direction:column;gap:16px}
+.rk-toolbar-top{display:flex;align-items:center;gap:8px}
+.rk-topic-bar{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;padding:2px 0}
+.rk-topic-bar::-webkit-scrollbar{display:none}
+.rk-tc{padding:8px 16px;border-radius:100px;border:1px solid #ddd;font-size:13px;font-weight:500;color:#333;white-space:nowrap;flex-shrink:0;cursor:pointer;transition:all .15s}
+.rk-tc:hover{border-color:#aaa}
+.rk-tc.on{background:#111;color:#fff;border-color:#111;font-weight:600}
+.rk-meta{padding:20px 0 0;display:flex;align-items:center;justify-content:space-between}
+.rk-cnt{font-size:13px;color:var(--mute)}
+.rk-srt{font-size:13px;color:var(--mute);display:flex;align-items:center;gap:4px;cursor:pointer}
+.rk-srt svg{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.rk-ex-list{padding-top:8px}
+.rk-ex-row{display:flex;align-items:flex-start;gap:16px;padding:18px 0;border-bottom:1px solid var(--line);cursor:pointer;transition:opacity .15s}
+.rk-ex-row:first-child{padding-top:10px}
+.rk-ex-row:hover{opacity:.65}
+.rk-ex-thumb-wrap{flex-shrink:0;position:relative}
+.rk-ex-thumb{width:72px;height:72px;flex-shrink:0;overflow:hidden;background:#f0efed;position:relative}
+.rk-ex-thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.rk-ex-thumb-ph{width:100%;height:100%;display:flex;align-items:center;justify-content:center}
+.rk-ex-thumb-ph span{font-family:'SUIT Variable',sans-serif;font-size:22px;font-weight:700;color:#fff;letter-spacing:-1px}
+.rk-ex-thumb-num{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:'SUIT Variable',sans-serif;font-size:22px;font-weight:700;color:#fff;letter-spacing:-1px}
+.rk-ex-body{flex:1;min-width:0}
+.rk-ex-free{font-size:9px;font-weight:700;color:#e75519;letter-spacing:.5px;margin-left:6px}
+.rk-ex-title{font-size:15.5px;font-weight:700;color:#1a1a1a;line-height:1.4;letter-spacing:-.02em;word-break:keep-all;margin-bottom:2px}
+.rk-ex-desc{font-size:12.5px;color:var(--mute);line-height:1.4;display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden;margin-bottom:8px}
+.rk-ex-foot{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.rk-ex-meta{display:flex;align-items:center;gap:8px;font-size:11px;color:var(--mute)}
+.rk-ex-meta .rf-kc-dot{width:16px;height:16px;font-size:8px}
+.rk-ex-kw{font-family:'SUIT Variable',sans-serif;font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--faint)}
+.rk-ex-tags{display:flex;gap:4px;flex-wrap:wrap}
+.rk-ex-tags span{font-size:10px;font-weight:500;padding:2px 8px;border-radius:20px;background:var(--tag-bg);color:rgba(0,0,0,.4)}
+.rk-fbtn{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:100px;border:1px solid var(--home-btn-border);font-size:13px;font-weight:600;color:#222;white-space:nowrap;flex-shrink:0;cursor:pointer;transition:all .15s}
+.rk-fbtn:hover{border-color:#999}
+.rk-fbtn svg{width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.rk-fbadge{display:none;min-width:18px;height:18px;padding:0 5px;border-radius:100px;background:#222;color:#fff;font-size:11px;font-weight:700;line-height:18px;text-align:center}
+.rk-fbtn.has-filters .rk-fbadge{display:inline-block}
+.rk-active-chips{display:none;flex-wrap:wrap;gap:6px;padding:0;margin-top:-4px}
+.rk-active-chips.show{display:flex}
+.rk-active-chip{display:inline-flex;align-items:center;gap:4px;padding:5px 10px;border-radius:100px;background:#f0f0f0;font-size:12px;color:#333;cursor:pointer;transition:background .15s;white-space:nowrap}
+.rk-active-chip:hover{background:#e0e0e0}
+.rk-active-chip svg{flex-shrink:0}
+.rk-active-clear{display:inline-flex;align-items:center;padding:5px 10px;border-radius:100px;background:none;border:none;font-family:inherit;font-size:12px;color:#999;cursor:pointer;white-space:nowrap}
+.rk-active-clear:hover{color:#666}
+.rk-modal-overlay{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.45);z-index:9999;align-items:center;justify-content:center;padding:24px;opacity:0;transition:opacity .2s}
+.rk-modal-overlay.open{display:flex}
+.rk-modal-overlay.visible{opacity:1}
+.rk-modal{width:100%;max-width:400px;max-height:85vh;background:#fff;border-radius:16px;display:flex;flex-direction:column;overflow:hidden;transform:translateY(12px);transition:transform .25s}
+.rk-modal-overlay.visible .rk-modal{transform:translateY(0)}
+.rk-modal-head{display:flex;align-items:center;justify-content:space-between;padding:20px 24px 14px;flex-shrink:0}
+.rk-modal-head span{font-size:17px;font-weight:700;color:#111}
+.rk-modal-close{width:32px;height:32px;border-radius:50%;border:none;background:#f0f0f0;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .15s}
+.rk-modal-close:hover{background:#e0e0e0}
+.rk-modal-body{flex:1;overflow-y:auto;padding:4px 24px 20px;-webkit-overflow-scrolling:touch}
+.rk-modal-group{margin-bottom:24px}
+.rk-modal-group:last-child{margin-bottom:8px}
+.rk-modal-label{font-size:13px;font-weight:700;color:#111;margin:0 0 10px;letter-spacing:.3px}
+.rk-modal-chips{display:flex;flex-wrap:wrap;gap:8px}
+.rk-chip{display:inline-flex;align-items:center;gap:5px;padding:9px 16px;border-radius:100px;border:1px solid #ddd;background:#fff;font-size:13px;color:#333;cursor:pointer;transition:all .15s;user-select:none;white-space:nowrap}
+.rk-chip:hover{border-color:#aaa}
+.rk-chip.on{background:#111;color:#fff;border-color:#111}
+.rk-chip.on::before{content:'';display:inline-block;width:14px;height:14px;border-radius:50%;flex-shrink:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 14 14' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='7' cy='7' r='7' fill='white'/%3E%3Cpath d='M4 7.2L6.2 9.4L10 4.6' stroke='%23111' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");background-size:14px 14px}
+.rk-modal-foot{padding:14px 24px 20px;border-top:1px solid #eee;display:flex;gap:10px;flex-shrink:0}
+.rk-modal-clear{padding:12px 20px;border-radius:12px;border:1px solid #ddd;background:#fff;font-family:inherit;font-size:14px;color:#555;cursor:pointer;transition:all .15s;white-space:nowrap}
+.rk-modal-clear:hover{border-color:#999}
+.rk-modal-apply{flex:1;padding:12px;border-radius:12px;border:none;background:#111;color:#fff;font-family:inherit;font-size:14px;font-weight:600;cursor:pointer;transition:opacity .15s}
+.rk-modal-apply:hover{opacity:.85}
+@media(max-width:767px){
+  .rk-ex-thumb{width:56px;height:56px}
+  .rk-ex-title{font-size:14px}
+  .rk-ex-row{gap:12px;padding:14px 0}
+  .rk-ex-tags span{font-size:9px;padding:2px 6px}
+  .rk-cta-inner{flex-direction:column;text-align:center;align-items:center}
+  .rk-explore{padding-right:0}
+  .rk-topic-bar{padding-right:20px;margin-right:-20px}
+  .rk-explore-search,.rk-meta,.rk-ex-list,.rk-toolbar-top,.rk-active-chips{padding-right:var(--pad)}
+}
+</style>
+
+<!-- ═══ 하단 네비게이션 CSS ═══ -->
+<style>
+.rf-bottom-nav{display:none;position:fixed;bottom:0;left:0;right:0;z-index:9998;background:#fff;border-top:1px solid #E8E8E8;padding:8px 0 calc(8px + env(safe-area-inset-bottom,0px))}
+.rf-bottom-nav-inner{display:flex;justify-content:space-around;align-items:center;width:100%}
+.rf-bottom-nav-item{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;cursor:default;flex:1;background:none;border:none;outline:none;color:#363636;-webkit-tap-highlight-color:transparent;text-decoration:none}
+.rf-bottom-nav-item svg{width:20px;height:20px}
+.rf-bottom-nav-item svg path,.rf-bottom-nav-item svg line{stroke:currentColor}
+.rf-bottom-nav-label{font-size:10px;font-weight:500;letter-spacing:-.02em;line-height:1.2em;color:inherit;white-space:nowrap}
+.rf-bottom-nav-item.rf-active{color:#e75519}
+.rf-bottom-nav-item.rf-active .rf-bottom-nav-label{font-weight:600}
+@media(max-width:768px){
+  .rf-bottom-nav{display:block}
+  body{padding-bottom:calc(64px + env(safe-area-inset-bottom,0px))}
+}
+</style>
+</head>
+<body>
+
+<!-- ═══ GNB ═══ -->
+<style>
+.digest-gnb *{margin:0!important;padding:0!important;box-sizing:border-box!important;font-family:'Pretendard',-apple-system,sans-serif!important;line-height:normal!important;text-decoration:none!important;letter-spacing:normal!important}
+.digest-gnb{--gnb-bg:#fafafa;--gnb-text:#1a1a1a;--gnb-text-secondary:rgba(0,0,0,0.65);--gnb-menu-bg:#fafafa;--gnb-menu-divider:rgba(0,0,0,0.08);--gnb-menu-disabled:rgba(0,0,0,0.3);--gnb-menu-category:rgba(0,0,0,0.4);--gnb-menu-coming:rgba(0,0,0,0.3)}
+.digest-gnb .gnb-header{height:60px!important;padding:0 24px!important;border-bottom:none!important;display:flex!important;justify-content:space-between!important;align-items:center!important;background:transparent!important;position:absolute!important;top:0!important;left:0!important;right:0!important;z-index:1000!important}
+.digest-gnb .gnb-logo{font-family:'SUIT',sans-serif!important;font-weight:800!important;font-size:14px!important;letter-spacing:1.5px!important;color:rgba(0,0,0,0.55)!important;cursor:pointer!important;flex-shrink:0!important;user-select:none!important}
+.digest-gnb .gnb-right{display:flex!important;align-items:center!important;gap:0!important}
+.digest-gnb .gnb-desktop-nav{display:flex!important;align-items:center!important;gap:28px!important;margin-right:20px!important}
+.digest-gnb .gnb-desktop-nav a{font-size:12.5px!important;font-weight:600!important;letter-spacing:0.8px!important;color:rgba(0,0,0,0.5)!important;cursor:pointer!important;transition:color 0.2s!important;white-space:nowrap!important;text-decoration:none!important}
+.digest-gnb .gnb-desktop-nav a:hover{color:rgba(0,0,0,0.85)!important}
+.digest-gnb .gnb-desktop-nav a.gnb-nav-active{color:#CF7F5E!important}
+.digest-gnb.gnb-dark .gnb-logo{color:rgba(255,255,255,0.85)!important}
+.digest-gnb.gnb-dark .gnb-desktop-nav a{color:rgba(255,255,255,0.6)!important}
+.digest-gnb.gnb-dark .gnb-desktop-nav a:hover{color:rgba(255,255,255,0.95)!important}
+.digest-gnb.gnb-dark .gnb-desktop-nav a.gnb-nav-active{color:#CF7F5E!important}
+.digest-gnb.gnb-dark .gnb-hamburger svg{color:rgba(255,255,255,0.6)!important}
+.digest-gnb.gnb-dark .gnb-hamburger:hover svg{color:rgba(255,255,255,0.95)!important}
+.digest-gnb .gnb-hamburger{display:flex!important;align-items:center!important;justify-content:center!important;width:36px!important;height:36px!important;background:none!important;border:none!important;cursor:pointer!important;padding:0!important;outline:none!important;-webkit-tap-highlight-color:transparent!important}
+.digest-gnb .gnb-hamburger svg{width:22px!important;height:22px!important;color:var(--gnb-text-secondary)!important;transition:color 0.2s!important}
+.digest-gnb .gnb-hamburger:hover svg{color:var(--gnb-text)!important}
+.gnb-menu-overlay{position:fixed!important;top:0!important;left:0!important;right:0!important;bottom:0!important;background:rgba(0,0,0,0.4)!important;z-index:2000!important;opacity:0!important;visibility:hidden!important;transition:opacity 0.3s,visibility 0.3s!important}
+.gnb-menu-overlay.open{opacity:1!important;visibility:visible!important}
+.gnb-menu-panel{position:fixed!important;top:0!important;right:0!important;bottom:0!important;width:280px!important;max-width:80vw!important;background:var(--gnb-menu-bg)!important;z-index:2001!important;transform:translateX(100%)!important;transition:transform 0.3s cubic-bezier(0.4,0,0.2,1)!important;display:flex!important;flex-direction:column!important;overflow-y:auto!important}
+.gnb-menu-panel.open{transform:translateX(0)!important}
+.gnb-menu-panel-header{display:flex!important;justify-content:flex-end!important;align-items:center!important;padding:12px 20px!important;min-height:44px!important}
+.gnb-menu-close{display:flex!important;align-items:center!important;justify-content:center!important;width:32px!important;height:32px!important;background:none!important;border:none!important;cursor:pointer!important;padding:0!important;outline:none!important}
+.gnb-menu-close svg{width:20px!important;height:20px!important;color:var(--gnb-text-secondary)!important;transition:color 0.2s!important}
+.gnb-menu-close:hover svg{color:var(--gnb-text)!important}
+.gnb-menu-group{padding:8px 24px!important}
+.gnb-menu-group+.gnb-menu-group{border-top:1px solid var(--gnb-menu-divider)!important}
+.gnb-menu-item{display:flex!important;align-items:center!important;justify-content:flex-start!important;padding:10px 0!important;font-size:15px!important;font-weight:500!important;color:var(--gnb-text)!important;cursor:pointer!important;transition:opacity 0.2s!important;text-decoration:none!important}
+.gnb-menu-item:hover{opacity:0.7!important}
+.gnb-menu-item.disabled{color:var(--gnb-menu-disabled)!important;cursor:default!important;pointer-events:none!important}
+.gnb-menu-item .gnb-badge-dark{display:inline-block!important;font-size:11px!important;font-weight:600!important;color:#fff!important;background:#1a1a1a!important;padding:4px 10px!important;border-radius:4px!important;letter-spacing:0.3px!important;line-height:1.2!important;margin-left:10px!important;white-space:nowrap!important;flex-shrink:0!important}
+.gnb-menu-item .gnb-badge-orange{display:inline-block!important;font-size:11px!important;font-weight:600!important;color:#fff!important;background:#e75519!important;padding:4px 10px!important;border-radius:4px!important;letter-spacing:0.3px!important;line-height:1.2!important;margin-left:10px!important;white-space:nowrap!important;flex-shrink:0!important}
+.gnb-menu-category{padding:10px 0 8px!important;font-size:12px!important;font-weight:700!important;color:var(--gnb-menu-category)!important;letter-spacing:1px!important;text-transform:uppercase!important}
+.gnb-menu-item.sub{padding-left:12px!important}
+.gnb-menu-category-toggle{padding:10px 0 8px!important;font-size:12px!important;font-weight:700!important;color:var(--gnb-menu-category)!important;letter-spacing:1px!important;text-transform:uppercase!important;display:flex!important;align-items:center!important;justify-content:space-between!important;cursor:pointer!important;user-select:none!important}
+.gnb-menu-category-toggle .gnb-toggle-icon{width:18px!important;height:18px!important;color:rgba(0,0,0,0.3)!important;transition:transform 0.25s!important;flex-shrink:0!important}
+.gnb-menu-category-toggle.gnb-collapsed .gnb-toggle-icon{transform:rotate(0deg)!important}
+.gnb-menu-category-toggle.gnb-expanded .gnb-toggle-icon{transform:rotate(45deg)!important}
+.gnb-menu-submenu{overflow:hidden!important;max-height:500px!important;transition:max-height 0.3s!important}
+.gnb-menu-submenu.gnb-collapsed{max-height:0!important}
+@media screen and (max-width:640px){
+  .digest-gnb .gnb-desktop-nav{display:none!important}
+  .digest-gnb .gnb-hamburger{display:none!important}
+  .digest-gnb .gnb-header{height:50px!important;padding:0 16px!important}
+  .digest-gnb .gnb-logo{font-size:13px!important}
+}
+</style>
+
+<div class="digest-gnb" id="digestGnb">
+  <header class="gnb-header">
+    <span class="gnb-logo" onclick="if(window.innerWidth>640)window.location.href='https://refeeel.com'">RE:FEEEL</span>
+    <div class="gnb-right">
+      <nav class="gnb-desktop-nav">
+        <a href="rekit.html" class="gnb-nav-active">RE:KIT</a>
+        <a href="#">PROGRAM</a>
+        <a href="mypage.html">MY</a>
+      </nav>
+      <button class="gnb-hamburger" onclick="openGnbMenu()" aria-label="메뉴 열기">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="20" y2="17"/></svg>
+      </button>
+    </div>
+  </header>
+</div>
+
+<div class="gnb-menu-overlay" id="gnbMenuOverlay" onclick="closeGnbMenu()"></div>
+<div class="gnb-menu-panel digest-gnb" id="gnbMenuPanel">
+  <div class="gnb-menu-panel-header">
+    <button class="gnb-menu-close" onclick="closeGnbMenu()" aria-label="메뉴 닫기">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+  </div>
+  <div class="gnb-menu-group">
+    <div class="gnb-menu-category">INTRODUCE</div>
+    <a href="/about" class="gnb-menu-item sub" onclick="closeGnbMenu()">리필 이란?</a>
+  </div>
+  <div class="gnb-menu-group">
+    <div class="gnb-menu-category">METHOD - 방법</div>
+    <a href="rekit.html" class="gnb-menu-item sub" onclick="closeGnbMenu()">RE:KIT</a>
+  </div>
+  <div class="gnb-menu-group">
+    <div class="gnb-menu-category-toggle gnb-expanded" onclick="toggleGnbSubmenu(this)">
+      <span>DIRECTION - 방향</span>
+      <svg class="gnb-toggle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+    </div>
+    <div class="gnb-menu-submenu">
+      <a href="/brandingclassmain" class="gnb-menu-item sub" onclick="closeGnbMenu()">브랜딩 클래스</a>
+      <a href="/counsel" class="gnb-menu-item sub" onclick="closeGnbMenu()"><span>1:1 컨설팅</span><span class="gnb-badge-orange">5월 마감</span></a>
+      <div class="gnb-menu-item sub disabled"><span>브랜드 전략 가이드 라인</span><span class="gnb-badge-dark">5월 마감</span></div>
+      <a href="/shop_view?idx=49" class="gnb-menu-item sub" onclick="closeGnbMenu()">네이버 플레이스 분석 진단 리포트</a>
+    </div>
+  </div>
+  <div class="gnb-menu-group">
+    <div class="gnb-menu-category-toggle gnb-expanded" onclick="toggleGnbSubmenu(this)">
+      <span>EXECUTION - 실행</span>
+      <svg class="gnb-toggle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+    </div>
+    <div class="gnb-menu-submenu">
+      <a href="/shop_view?idx=39" class="gnb-menu-item sub" onclick="closeGnbMenu()">RE:노션</a>
+      <div class="gnb-menu-item sub disabled"><span>노션x인스타 데이터 자동화</span><span class="gnb-badge-dark">준비중</span></div>
+      <div class="gnb-menu-item sub disabled"><span>AI챗봇 만들기 완성판</span><span class="gnb-badge-dark">준비중</span></div>
+    </div>
+  </div>
+  <div class="gnb-menu-group">
+    <a href="/faq" class="gnb-menu-item" onclick="closeGnbMenu()">FAQ</a>
+    <a href="https://pf.kakao.com/_yqrJn/chat" target="_blank" class="gnb-menu-item" onclick="closeGnbMenu()">1:1 문의하기</a>
+  </div>
+</div>
+
+<script>
+function openGnbMenu(){document.getElementById('gnbMenuOverlay').classList.add('open');document.getElementById('gnbMenuPanel').classList.add('open');document.body.style.overflow='hidden';}
+function closeGnbMenu(){document.getElementById('gnbMenuOverlay').classList.remove('open');document.getElementById('gnbMenuPanel').classList.remove('open');document.body.style.overflow='';}
+function toggleGnbSubmenu(el){var sub=el.nextElementSibling;if(!sub)return;var exp=el.classList.contains('gnb-expanded');if(exp){el.classList.remove('gnb-expanded');el.classList.add('gnb-collapsed');sub.classList.add('gnb-collapsed');}else{el.classList.remove('gnb-collapsed');el.classList.add('gnb-expanded');sub.classList.remove('gnb-collapsed');}}
+(function(){
+  var gnb=document.getElementById('digestGnb');
+  var header=gnb.querySelector('.gnb-header');
+  function checkDark(){
+    var rect=header.getBoundingClientRect();
+    var elBelow=document.elementFromPoint(rect.left+rect.width/2,rect.bottom+1);
+    if(!elBelow)return;
+    var bg=window.getComputedStyle(elBelow).backgroundColor;
+    var m=bg.match(/\d+/g);
+    if(m){var lum=(parseInt(m[0])*299+parseInt(m[1])*587+parseInt(m[2])*114)/1000;gnb.classList.toggle('gnb-dark',lum<128);}
+  }
+  window.addEventListener('scroll',checkDark);checkDark();
+  setTimeout(checkDark,500);
+})();
+</script>
+
+<!-- ═══ HEADER ═══ -->
+<div class="rk-hd"><div class="rk-hd-inner">
+  <p class="rk-hd-label">RE:Content Marketing</p>
+  <div class="rk-hd-brand">RE:KIT</div>
+  <p class="rk-hd-copy">콘텐츠는 올리고 있지만,<br>매출로 이어지는 구조를 모르겠다면.</p>
+</div></div>
+
+<!-- ═══ TAB NAV ═══ -->
+<nav class="rk-tabs-nav"><div class="rk-tabs-nav-inner">
+  <button class="rk-tabs-btn on">큐레이션</button>
+  <button class="rk-tabs-btn">탐색</button>
+</div></nav>
+
+<!-- ═══ 큐레이션 탭 ═══ -->
+<div class="tab-panel show" id="tab-home">
+  <section class="rk-new"><div class="rk-new-inner" id="rkCurHero"></div></section>
+  <section class="rk-cur-sec"><div class="rk-cur-sec-inner" id="rkCurBlocks"></div></section>
+</div>
+
+<!-- ═══ 탐색 탭 ═══ -->
+<div class="tab-panel" id="tab-explore">
+<div class="rk-explore">
+  <div class="rk-explore-search"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg><input id="rkQ" type="text" placeholder="제목, 태그로 검색"></div>
+  <div class="rk-toolbar">
+    <div class="rk-toolbar-top">
+      <button class="rk-fbtn" id="rkFilterBtn"><svg viewBox="0 0 24 24"><path d="M4 6h16M7 12h10M10 18h4"/></svg><span>Filters</span><span class="rk-fbadge" id="rkFBadge">0</span></button>
+    </div>
+    <div class="rk-topic-bar" id="rkTopicBar"></div>
+    <div class="rk-active-chips" id="rkActiveChips"></div>
+  </div>
+  <div class="rk-meta"><div class="rk-cnt" id="rkCount">41개의 자료</div><div class="rk-srt" id="rkSort">최신순 <svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></div></div>
+  <div class="rk-ex-list" id="rkExList"></div>
+</div>
+<section class="rk-cta" style="margin-top:0"><div class="rk-cta-inner">
+  <div><h3>지금 시작하면,<br>모든 RE:KIT을 볼 수 있어요.</h3><p>매주 업데이트되는 콘텐츠 마케팅 자료 · 무료 RE:KIT부터.</p></div>
+  <a class="rk-cta-btn" href="https://refeeel.com/shop_view?idx=8">RE:KIT 월구독 시작하기</a>
+</div></section>
+</div>
+
+<!-- ═══ 필터 모달 ═══ -->
+<div class="rk-modal-overlay" id="rkModalOverlay">
+<div class="rk-modal">
+  <div class="rk-modal-head"><span>Filters</span><button class="rk-modal-close" id="rkModalClose"><svg viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12" stroke="#555" stroke-width="2" stroke-linecap="round" fill="none"/></svg></button></div>
+  <div class="rk-modal-body">
+    <div class="rk-modal-group"><p class="rk-modal-label">Category</p><div class="rk-modal-chips" id="mcCat"></div></div>
+    <div class="rk-modal-group"><p class="rk-modal-label">주제</p><div class="rk-modal-chips" id="mcTopic"></div></div>
+    <div class="rk-modal-group"><p class="rk-modal-label">실행 조건</p><div class="rk-modal-chips" id="mcCond"></div></div>
+  </div>
+  <div class="rk-modal-foot"><button class="rk-modal-clear" id="rkModalClear">Clear all</button><button class="rk-modal-apply" id="rkModalApply">41개 RE:KIT 보기</button></div>
+</div>
+</div>
+
+<!-- ═══ 하단 네비게이션 ═══ -->
+<nav class="rf-bottom-nav">
+<div class="rf-bottom-nav-inner">
+  <a href="rekit.html" class="rf-bottom-nav-item rf-active">
+    <svg viewBox="0 0 20 23" fill="none"><path d="M1.27 5.95795L10 11.0079L18.73 5.95795M10 21.0779V10.9979M19 14.9979V6.99795C18.9996 6.64722 18.9071 6.30276 18.7315 5.99911C18.556 5.69546 18.3037 5.44331 18 5.26795L11 1.26795C10.696 1.09241 10.3511 1 10 1C9.64893 1 9.30404 1.09241 9 1.26795L2 5.26795C1.69626 5.44331 1.44398 5.69546 1.26846 5.99911C1.09294 6.30276 1.00036 6.64722 1 6.99795V14.9979C1.00036 15.3487 1.09294 15.6931 1.26846 15.9968C1.44398 16.3004 1.69626 16.5526 2 16.7279L9 20.7279C9.30404 20.9035 9.64893 20.9959 10 20.9959C10.3511 20.9959 10.696 20.9035 11 20.7279L18 16.7279C18.3037 16.5526 18.556 16.3004 18.7315 15.9968C18.9071 15.6931 18.9996 15.3487 19 14.9979Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <span class="rf-bottom-nav-label">RE:KIT</span>
+  </a>
+  <a href="classes.html" class="rf-bottom-nav-item">
+    <svg viewBox="0 0 24 24" fill="none"><path d="M4 19.5V4.5C4 3.83696 4.26339 3.20107 4.73223 2.73223C5.20107 2.26339 5.83696 2 6.5 2H20V22H6.5C5.83696 22 5.20107 21.7366 4.73223 21.2678C4.26339 20.7989 4 20.163 4 19.5Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M4 19.5C4 18.837 4.26339 18.2011 4.73223 17.7322C5.20107 17.2634 5.83696 17 6.5 17H20" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <span class="rf-bottom-nav-label">CLASS</span>
+  </a>
+  <a href="#" class="rf-bottom-nav-item">
+    <svg viewBox="0 0 24 24" fill="none"><path d="M21 15C21 15.5304 20.7893 16.0391 20.4142 16.4142C20.0391 16.7893 19.5304 17 19 17H7L3 21V5C3 4.46957 3.21071 3.96086 3.58579 3.58579C3.96086 3.21071 4.46957 3 5 3H19C19.5304 3 20.0391 3.21071 20.4142 3.58579C20.7893 3.96086 21 4.46957 21 5V15Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <span class="rf-bottom-nav-label">NAKTA AI</span>
+  </a>
+  <a href="mypage.html" class="rf-bottom-nav-item">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21V19C20 17.9391 19.5786 16.9217 18.8284 16.1716C18.0783 15.4214 17.0609 15 16 15H8C6.93913 15 5.92172 15.4214 5.17157 16.1716C4.42143 16.9217 4 17.9391 4 19V21"/><circle cx="12" cy="7" r="4"/></svg>
+    <span class="rf-bottom-nav-label">MY</span>
+  </a>
+</div>
+</nav>
+
+<!-- ═══════════════════════════════════════ -->
+<!-- ═══ SCRIPTS ═══ -->
+<!-- ═══════════════════════════════════════ -->
+
+<!-- 위젯0: 공용 데이터 -->
+<script>
+(function(){
+'use strict';
+var CAT_COLORS={marketing:'#6465f5',branding:'#e75519',content:'#f5ca43'};
+var CAT_LABEL={marketing:'Marketing',branding:'Branding',content:'Content'};
+var CAT_DOT={marketing:'mk',branding:'br',content:'ct'};
+var CAT_LETTER={marketing:'M',branding:'B',content:'C'};
+var ITEMS=[
+{n:64,cat:'content',kw:'STORY · WRITING · FILTER',t:'감성팔이 말고,\n진짜 감성을 쓰는 두 단계',d:'일기처럼 쏟아내고 두 종류의 군더더기를 분리하는 두 단계 라이팅법.',topics:['콘텐츠','카피·후킹'],conds:[],img:'https://i.pinimg.com/736x/f6/43/0f/f6430f3f21da5ff8c95e991231906719.jpg',free:false},
+{n:63,cat:'content',kw:'STORY · FILTER · BRAND',t:'성공하는 감성팔이',d:'기록·감성팔이·스토리는 마지막 한 문장에서 갈린다.',topics:['콘텐츠','카피·후킹','브랜딩'],conds:[],img:'https://i.pinimg.com/736x/1d/12/cf/1d12cf89574d2c30533d0036efdf94c4.jpg',free:false},
+{n:62,cat:'content',kw:'INTENTION · BRAND · CONTENT',t:'같은 사람의 두 계정, 사업으로 이어지거나 일기로 끝나거나.',d:'차이는 의도뿐이었다. 같은 일상이 사업이 되는 의도 3가지.',topics:['콘텐츠','브랜딩','인스타그램'],conds:[],img:'https://i.pinimg.com/736x/79/f4/bc/79f4bc51ee69406040dcc1a02971bc01.jpg',free:false},
+{n:61,cat:'marketing',kw:'SOCIAL · TRUST · ORGANIC',t:'돈 안 쓰고 SNS만으로 파는 법',d:'대화·인격체·가치 교환 — 광고 없이 팔리는 계정의 세 가지 본질',topics:['인스타그램','릴스','콘텐츠전략'],conds:[],img:'https://i.pinimg.com/736x/0f/b5/b2/0fb5b29f30d7326c98a8228782a427b7.jpg',free:false},
+{n:60,cat:'branding',kw:'INCOME · ASSET · STRUCTURE',t:'지금의 매출에서 한 단계 더 올라가고 싶어요',d:'소득형에서 자산형으로 사업 구조를 바꾸는 관점',topics:['브랜딩','마케팅','포지셔닝'],conds:[],img:'https://i.pinimg.com/736x/41/72/e1/4172e16b93f800701c2eac557bc9d80b.jpg',free:false},
+{n:59,cat:'marketing',kw:'SOCIAL SELLING · TRUST',t:'판매원처럼 보이기 싫은데, 내가 봐도 판매원 같다고 느껴져요',d:'팔려는 티가 신뢰를 죽인다 — 인스타에서 빠지기 쉬운 3가지 함정과 한 가지 해법',topics:['인스타그램','릴스','카피·후킹'],conds:[],img:'https://i.pinimg.com/736x/1d/d2/32/1dd232169ae2da817e6febac7949ec21.jpg',free:false},
+{n:58,cat:'branding',kw:'B2B · B2C · POSITIONING',t:'같은 계정에서 고객도 모으고, 사업자도 모으고 싶어요',d:'계정을 분리해서 운영해야 할까?',topics:['차별화·타겟','인스타그램'],conds:[],img:'https://i.pinimg.com/736x/61/6f/69/616f69eb2481ff58d0da660b9589b5f5.jpg',free:false},
+{n:57,cat:'marketing',kw:'SUBTRACTION',t:'빼는 게 먼저, 더하는 게 나중',d:'피카소처럼 쌓고, 멍거처럼 뺀다',topics:['뇌과학','인스타그램','릴스','블로그'],conds:[],img:'https://pub-587f756dff384f5b8d19d7a1d0b1acdb.r2.dev/Gemini_Generated_Image_nc6yd5nc6yd5nc6y.png',free:false},
+{n:56,cat:'marketing',kw:'REVIEW DESIGN',t:'AI가 추천하는 리뷰를 만드는 법',d:'리뷰 유도 질문 설계부터 답글 전략, 인증 전략, 루틴화까지.',topics:['데이터','AI','AEO'],conds:[],img:'https://i.pinimg.com/736x/9b/67/35/9b673526ff97faffc825101534f2300b.jpg',free:false},
+{n:55,cat:'marketing',kw:'NAVER PLACE',t:'2026년 네이버 플레이스, 리뷰기 많아도 밀리는 이유',d:'알고리즘이 바뀌었다. 리뷰 수가 아니라 최신성, 품질, 행동 데이터가 순위를 결정한다.',topics:['데이터','AI','AEO'],conds:[],img:'https://i.pinimg.com/736x/50/31/d5/5031d54813b16c2f4f5c2440aa5d0bba.jpg',free:false},
+{n:54,cat:'marketing',kw:'AI AGENT',t:'실행하는 AI, 마누스로 인스타 탈탈 터는 프롬프트',d:'AI 에이전트에 프롬프트 하나 넣으면 계정 분석 리포트가 5분 만에',topics:['데이터','인스타그램','AI','차별화·타겟'],conds:['AI'],img:'https://i.pinimg.com/736x/ec/31/3b/ec313b4ab2abbdd37a1f783a3ea6c2b4.jpg',free:false},
+{n:53,cat:'marketing',kw:'ANCHORING',t:'선택할 수밖에 없게 만드는, 마케팅 설계 4가지',d:'앵커링, 디폴트, 피크엔드, 인지 부하 — 판단을 줄이는 방식이 전환율을 높인다.',topics:['뇌과학','카피·후킹','퍼널'],conds:[],img:'https://i.pinimg.com/1200x/28/19/41/2819415779b68e1a4271825bea384b44.jpg',free:false},
+{n:52,cat:'content',kw:'BENCHMARK',t:'진짜 본질을 훔치는 법.',d:'What과 How를 구분하지 못하면, 그 무엇도 훔칠 수 없다.',topics:['콘텐츠전략','차별화·타겟'],conds:[],img:'https://i.pinimg.com/736x/6a/27/48/6a2748a4aac50b393992f2a8ec6a495c.jpg',free:false},
+{n:51,cat:'marketing',kw:'STORYTELLING',t:'뇌는 왜 이야기에 속는가',d:'스토리텔링이 전문가도 넘어뜨리는 이유를 뇌과학으로 풀고, 콘텐츠에 적용하는 법까지',topics:['뇌과학','카피·후킹'],conds:[],img:'https://i.pinimg.com/736x/f5/06/c1/f506c138e2ab79983d8fcf95935ece3f.jpg',free:false},
+{n:50,cat:'marketing',kw:'STORYTELLING',t:'마케터가 마케팅에 당할 수밖에 없었던 이유: 고양이 입양 사기',d:'460만 원짜리 분양 사기 안에 숨어 있던 5가지 마케팅 기법을 뜯어본 기록',topics:['뇌과학','카피·후킹','퍼널'],conds:[],img:'https://i.pinimg.com/736x/4e/03/96/4e039634ac4427fc9a6eb82bd559e3cf.jpg',free:false},
+{n:49,cat:'marketing',kw:'PROCESS VALUE',t:"요즘 전환이 잘 되는 릴스에는 ' '가 있다",d:'사람들의 공감과 전환을 이끌어낸 2개의 릴스.',topics:['릴스','카피·후킹','퍼널'],conds:[],img:'https://i.pinimg.com/736x/fc/a0/b7/fca0b79bceee4fb74aef91034795a7e3.jpg',free:false},
+{n:48,cat:'content',kw:'TREND',t:'릴스의 철학에도 유행이 있다',d:'이전에 먹혔던 콘텐츠, 그리고 지금 먹히는 콘텐츠',topics:['콘텐츠전략','브랜딩','인스타그램','차별화·타겟'],conds:[],img:'https://i.pinimg.com/736x/c7/19/32/c71932cd1148d38618686ce26c6375a2.jpg',free:false},
+{n:47,cat:'content',kw:'AI DESIGN',t:'AI 카드뉴스, 말로 디자인하는 법',d:'디자인을 모르는 게 아니라, 뭐가 이상한지 말로 못 하는 것.',topics:['인스타그램','AI','콘텐츠전략'],conds:['AI'],img:'https://i.pinimg.com/1200x/60/0a/26/600a2601685cb196f0ee41f5f906819a.jpg',free:false},
+{n:46,cat:'content',kw:'CONTENT · REPEAT',t:'똑같은 말을 반복하는데, 전환율이 올라간다?',d:'같은 말을 반복했는데 반응이 올라간다면, 그건 우연이 아니다.',topics:['콘텐츠','데이터','브랜딩','포지셔닝'],conds:[],img:'https://i.pinimg.com/736x/1b/37/bf/1b37bf1ebdcb75a318fa6a95dbbbb28c.jpg',free:false},
+{n:45,cat:'branding',kw:'BRAND · POSITIONING',t:'떠오르는 브랜드의 비밀',d:'매일 보일 필요 없다. 그 순간에만 떠오르면 된다.',topics:['브랜딩','포지셔닝','콘텐츠','마케팅'],conds:[],img:'https://i.pinimg.com/736x/65/5f/f4/655ff468d0735c2fe2be9b639b99b813.jpg',free:false},
+{n:44,cat:'branding',kw:'DAILY',t:'어떻게 일상을 브랜드로 만드는가?',d:'같은 일상인데 왜 다를까. 관점, 관계, 스토리 — 브랜드의 의도를 만드는 세 가지.',topics:['브랜딩','인스타그램','콘텐츠'],conds:[],img:'https://i.pinimg.com/736x/c7/18/9d/c7189d3b371a85034a011e99dd42e42e.jpg',free:false},
+{n:43,cat:'branding',kw:'PERSONA',t:'브랜드를 인간화할 때 빠지는 함정',d:'진정성은 양이 아니라 정합성. 연기, 고정, 캐릭터화 — 세 가지 함정.',topics:['브랜딩','차별화·타겟'],conds:[],img:'https://i.pinimg.com/736x/9b/6c/79/9b6c79971d5f847b10a18b58baf60efb.jpg',free:false},
+{n:42,cat:'branding',kw:'P.BRAND',t:'진짜 수익 구조를 만들어주는 퍼스널 브랜딩',d:'인간을 브랜드화하면 파편화되고, 브랜드를 인간화하면 확장된다.',topics:['브랜딩','차별화·타겟'],conds:[],img:'https://i.pinimg.com/1200x/d9/37/74/d93774f2014aa88de35462846ea8ab9f.jpg',free:false},
+{n:41,cat:'marketing',kw:'TOFU',t:'팔지 않으면 팔리는 3단계 콘텐츠 퍼널',d:'피드·스토리·릴스, 역할을 분리하면 매출이 따라옵니다.',topics:['인스타그램','퍼널','콘텐츠전략'],conds:[],img:'https://i.pinimg.com/736x/6e/9d/35/6e9d35d0024b1c97f40a6c370ef3fc9e.jpg',free:true},
+{n:40,cat:'content',kw:'REELS · HOOK',t:'스크롤을 멈추게 만드는 3가지 원리',d:'훅 설계 원리, 첫 프레임, 루프 구조',topics:['릴스','카피·후킹'],conds:[],img:'https://i.pinimg.com/1200x/23/d1/eb/23d1eb29c8c8ec9679c1ac9c452e3859.jpg',free:false},
+{n:39,cat:'marketing',kw:'INSTA · COPY',t:'인스타그램 캡션, 검색되는 글쓰기',d:'캡션 첫 줄, Alt Text, 프로필 바이오 — 인스타 SEO 실행 체크리스트',topics:['인스타그램','카피·후킹','SEO'],conds:['3분컷'],img:'https://cdn.imweb.me/upload/S202505026d116fc085279/7d8116a3b5e0b.jpg',free:false},
+{n:38,cat:'marketing',kw:'INSTA',t:'2026 인스타그램, 규칙이 바뀌었다.',d:'알고리즘·피드·해시태그 — 2026년에 바뀐 핵심 규칙 3가지 점검',topics:['인스타그램'],conds:['심화기획'],img:'https://i.pinimg.com/736x/fa/8b/6e/fa8b6ec860f3019f506d6587dc3d2e19.jpg',free:false},
+{n:37,cat:'branding',kw:'COMPETITOR',t:'차별점 찾는 프롬프트',d:'같은 고객을 두고 경쟁하는 계정 3개의 차별점을 AI로 분석하고, 내 콘텐츠 방향을 잡는 프롬프트',topics:['브랜딩','AI','차별화·타겟'],conds:['AI'],img:'https://cdn.imweb.me/upload/S202505026d116fc085279/f7b703a1e24eb.jpg',free:true},
+{n:36,cat:'marketing',kw:'JTBD · TARGET',t:'사람은 타겟이 아니다.',d:"인구통계 대신 '상황'으로 타겟을 정의하고, POV 훅으로 바꾸는 공식",topics:['차별화·타겟','카피·후킹'],conds:[],img:'https://pub-587f756dff384f5b8d19d7a1d0b1acdb.r2.dev/69263454fadef2e737cca9c57025f285.jpg',free:true},
+{n:35,cat:'marketing',kw:'AUTOMATE',t:'AEO 자동화, 하루 만에 만든 기록',d:'AI에게 브랜드를 어필하는 AEO 마케팅, 월 500원에 완성한 파이프라인.',topics:['블로그','데이터','AEO'],conds:['자동화','심화기획'],img:'https://i.pinimg.com/736x/ae/af/eb/aeafeb23c49fbc81b7eed9aad63ed132.jpg',free:false},
+{n:34,cat:'marketing',kw:'AEO',t:'AI가 추천하지 않으면 없는 브랜드',d:'SEO에서 AEO로, 답을 찾는 방식이 바뀌고 있습니다.',topics:['블로그','AEO'],conds:['심화기획'],img:'https://cdn.imweb.me/upload/S202505026d116fc085279/a8c5777bff471.jpg',free:false},
+{n:33,cat:'marketing',kw:'LANGUAGE',t:'검증된 언어로 마케팅하는 법',d:'정리된 데이터를 릴스 훅, 광고, 상세페이지에 바로 꽂는 법.',topics:['데이터','카피·후킹'],conds:[],img:'https://i.pinimg.com/736x/d6/72/44/d67244309d205a6f9b46a78921d6459c.jpg',free:false},
+{n:32,cat:'marketing',kw:'CAPTURE',t:'소재 보물창고를 AI로 터는 법',d:'나에게 반응한, 검증 된 보물창고를 AI로 추출하고, 엑셀 한 장으로 정리합니다.',topics:['데이터','AI'],conds:['AI'],img:'https://i.pinimg.com/736x/f0/83/f7/f083f7d4cbc715f7ac333006311e5769.jpg',free:false},
+{n:31,cat:'marketing',kw:'DATA',t:'당신의 사업을: 누가, 언제, 뭘, 어떻게 — 빠진 건 \'왜\'',d:'데이터는 이미 쌓여 있습니다. 읽는 법을 몰랐을 뿐.',topics:['데이터'],conds:['심화기획'],img:'https://i.pinimg.com/736x/8e/26/ce/8e26cef337244884617bb3b4ca4281ee.jpg',free:false},
+{n:30,cat:'branding',kw:'SCHEMA',t:'사람들은 당신을 0.5초 만에 판단하고 결정한다',d:'스키마와 인지부조화 — 고객이 당신을 보자마자 결정하는 것',topics:['뇌과학','브랜딩'],conds:[],img:'https://cdn.imweb.me/upload/S202505026d116fc085279/dfddaa28861a0.png',free:true},
+{n:29,cat:'content',kw:'PROMPT',t:'검증된 패턴을 소재로 바꾸는 프롬프트',d:'분석에서 발견한 패턴을 다음 릴스 소재로 연결하는 방법.',topics:['인스타그램','릴스','데이터'],conds:['AI'],img:'https://i.pinimg.com/1200x/3f/9b/b4/3f9bb4bba2366847db63ba45aa022d5f.jpg',free:false},
+{n:28,cat:'content',kw:'PATTERN',t:'쌓인 데이터에서 패턴 읽는 법',d:"스크립트를 AI에게 던져서 '왜 잘 됐는지'를 찾는 프롬프트.",topics:['인스타그램','릴스','데이터'],conds:['AI'],img:'https://i.pinimg.com/736x/c9/b4/73/c9b473dadfb1e9e891cb5fd932cfa346.jpg',free:false},
+{n:27,cat:'content',kw:'AUTOMATE',t:'인스타 → 노션 자동 수집 완전판',d:'n8n 워크플로우 파일 + Notion DB 템플릿 포함.',topics:['인스타그램','데이터'],conds:['자동화'],img:'https://i.pinimg.com/736x/35/f6/bb/35f6bbeac98407f2731bb19abcf73a2a.jpg',free:false},
+{n:26,cat:'content',kw:'DATA',t:'감이 아니라 데이터로 만드는 콘텐츠',d:'인스타 데이터를 매일 자동으로 노션에 수집하는 자동화 셋팅법.',topics:['인스타그램','릴스','데이터'],conds:['자동화'],img:'https://i.pinimg.com/736x/e8/02/1c/e8021ce3c988bee82fdc6c20fad58ba9.jpg',free:false},
+{n:25,cat:'content',kw:'BOUNDARY',t:'AI를 가장 효율적으로 쓰는 방법',d:'AI로 모든게 가능한 지금, 콘텐츠와 마케팅에 쓴다면?',topics:['AI','콘텐츠전략'],conds:['AI'],img:'https://i.pinimg.com/1200x/5b/af/a6/5bafa67306cb4d3b487c5475097990eb.jpg',free:false},
+{n:24,cat:'content',kw:'HOOK',t:'낚시가 필요할 때',d:'훅 공식 7가지 — 빈칸 채우기 템플릿',topics:['릴스','카피·후킹'],conds:['3분컷'],img:'https://i.pinimg.com/1200x/ac/8f/58/ac8f580ea6b2decb5fb1dcba9231a5e7.jpg',free:false},
+{n:23,cat:'branding',kw:'DIAGNOSE',t:'내 인스타는 어떻게 인식될까? AI 진단 프롬프트',d:'처음 온 사람의 눈으로 내 계정을 봐줘.',topics:['인스타그램','차별화·타겟','브랜딩'],conds:['AI'],img:null,free:false},
+{n:22,cat:'marketing',kw:'FORMULA',t:'콘텐츠 공식이 효과없는 유형',d:'이 공식이 작동하는 환경과 당신이 쓰고 있는 환경이 다르기 때문.',topics:['인스타그램','콘텐츠전략','퍼널'],conds:['심화기획'],img:'https://i.pinimg.com/1200x/50/da/48/50da48b3f1ddc40a86eb14c13d6bc40c.jpg',free:true},
+{n:21,cat:'content',kw:'TYPE',t:'사업자가 만들어야 하는 콘텐츠란',d:'같은 인스타그램, 완전히 다른 결과를 만드는 한 끗.',topics:['인스타그램','릴스','콘텐츠전략'],conds:['3분컷'],img:'https://i.pinimg.com/1200x/aa/88/1b/aa881b7d7a26ccdc74061f5a8b916a2f.jpg',free:false},
+{n:20,cat:'branding',kw:'FEED',t:'릴스 말고 피드',d:'릴스가 터져도 전환은 되지 않는다.',topics:['인스타그램'],conds:['3분컷'],img:'https://i.pinimg.com/736x/2e/d9/9d/2ed99dc29c2fd039430c700b55701ee7.jpg',free:false},
+{n:19,cat:'content',kw:'ANALYZE',t:'터진 릴스를 분석하는 기획자의 프롬프트',d:'잘 되는 콘텐츠의 의도를 읽는 법',topics:['릴스'],conds:['AI','3분컷'],img:null,free:false},
+{n:18,cat:'marketing',kw:'FRAME',t:'같은 걸 팔아도, 더 좋아보이게 파는 방법',d:'어떤 건 사고 싶고, 사고 싶지 않아지는 이유',topics:['뇌과학','카피·후킹'],conds:['심화기획'],img:'https://i.pinimg.com/736x/a4/34/5e/a4345e54bb29b2f5592b9b621c8b5dc2.jpg',free:false},
+{n:17,cat:'content',kw:'SOUND',t:'삭제 걱정 없는 AI 음원 생성',d:'AI로 무료 음원을 만드는 가장 쉬운 방법',topics:['릴스'],conds:['AI','자동화'],img:null,free:false},
+{n:16,cat:'content',kw:'PREP',t:'설득의 2가지 공식',d:'콘텐츠 기획할 때 저장해두고 꺼내 쓰는 2가지 설득 구조',topics:['카피·후킹'],conds:['3분컷'],img:'https://i.pinimg.com/736x/a7/9c/79/a79c797ef72bfc5c70d72959a52b9811.jpg',free:false},
+{n:15,cat:'content',kw:'PROFILE',t:'전환율이 높아지는 인스타 프로필 셋팅법',d:'프로필 셋팅만 다르게 해도 전환율이 다르다',topics:['인스타그램','퍼널'],conds:['3분컷'],img:'https://i.pinimg.com/736x/c9/b4/73/c9b473dadfb1e9e891cb5fd932cfa346.jpg',free:false},
+{n:14,cat:'branding',kw:'FONT',t:'비싸게 팔리는 브랜드들의 폰트',d:'촌스러운 폰트로 말하면 그냥 싸구려처럼 보인다.',topics:['인스타그램','브랜딩'],conds:['3분컷'],img:'https://i.pinimg.com/736x/14/04/d0/1404d03edd86aa108c28ff34e1490701.jpg',free:false},
+{n:13,cat:'branding',kw:'TARGET',t:'같은 걸 팔아도 매번 새롭게 보이는 방법',d:'한 번도 본 적 없는 잠재 고객의 마음을 읽는 법',topics:['차별화·타겟','브랜딩'],conds:['심화기획'],img:'https://i.pinimg.com/736x/a3/c1/51/a3c1518944cbe0b79d4ff96f3a50aa4d.jpg',free:false},
+{n:12,cat:'content',kw:'CTA',t:'인스타에서 가장 빠르게 문의를 늘리는 방법',d:'전환율을 높이는 자동화 CTA 설계법',topics:['인스타그램','퍼널'],conds:['3분컷'],img:'https://i.pinimg.com/736x/14/04/d0/1404d03edd86aa108c28ff34e1490701.jpg',free:false},
+{n:11,cat:'marketing',kw:'CLOSE',t:'상담 10분 만에 1000만원 결제',d:'사업자들이 매일 잊어버리는 고객의 구매 과정',topics:['뇌과학','퍼널'],conds:['심화기획'],img:'https://i.pinimg.com/1200x/03/18/d1/0318d1fdbe3a58238885cab875d4de58.jpg',free:false},
+{n:10,cat:'content',kw:'AUTOMATE',t:"진짜 '나'를 자동화하는 법",d:'내 말투와 성공 공식, AI가 학습하게 만드는 법',topics:['릴스','AI'],conds:['자동화','AI'],img:'https://i.pinimg.com/1200x/01/07/c1/0107c1ae74ba72b70a8b749c2595790e.jpg',free:false},
+{n:9,cat:'content',kw:'EDIT',t:'릴스 편집이 100배 편해지는 방법',d:'당신의 첫인상을 망치는데 가장 큰 요인',topics:['릴스'],conds:['3분컷'],img:null,free:false},
+{n:8,cat:'marketing',kw:'SPECIFIC',t:'콘텐츠를 매출로 바꿔주는 구체성',d:'성공한 계정들을 분석해서 찾은 단 하나의 공통점.',topics:['카피·후킹','콘텐츠전략'],conds:['심화기획'],img:null,free:false},
+{n:7,cat:'marketing',kw:'VIRAL',t:'콘텐츠 하나로 3억?',d:'말도 안 되는 말이 12억의 매출을 만든 이유',topics:['카피·후킹','콘텐츠전략'],conds:['심화기획'],img:'https://i.pinimg.com/736x/2e/d9/9d/2ed99dc29c2fd039430c700b55701ee7.jpg',free:false},
+{n:6,cat:'marketing',kw:'NEURO',t:'팔이피플의 뇌과학 마케팅',d:'대부분의 사업자가 마케팅을 실패하는 이유',topics:['뇌과학'],conds:['심화기획'],img:'https://i.pinimg.com/1200x/c3/71/0d/c3710d8a9fd7f59c7723a9786187795b.jpg',free:false},
+{n:5,cat:'marketing',kw:'COLD',t:'소름 돋는 카피의 비밀',d:'점쟁이와 마케터의 공통점',topics:['뇌과학','카피·후킹'],conds:['심화기획'],img:'https://i.pinimg.com/736x/41/2f/ec/412fec8f59b4818d37cf2e102652f97a.jpg',free:false},
+{n:4,cat:'marketing',kw:'STORY',t:'매출이 되는 스토리텔링 공식',d:'저장이 된다고 그게 매출로 이어지는 건 아니다',topics:['카피·후킹','릴스'],conds:['심화기획'],img:'https://i.pinimg.com/736x/b9/14/d4/b914d4f6080664c9f61e9fa9651ee5b6.jpg',free:false},
+{n:3,cat:'marketing',kw:'FUNNEL',t:'노출이 매출이 되는 3단계',d:'조회수를 매출로 바꾸는 전략',topics:['인스타그램','퍼널'],conds:['심화기획'],img:'https://i.pinimg.com/736x/31/ed/26/31ed26dfdf5ffb86fc868386be657ab9.jpg',free:false},
+{n:2,cat:'branding',kw:'TREND',t:'요즘 사업자들의 인스타 트렌드',d:'같은 인스타그램, 완전히 다른 결과를 만드는 한 끗 차이.',topics:['인스타그램','브랜딩'],conds:['심화기획'],img:'https://i.pinimg.com/1200x/aa/88/1b/aa881b7d7a26ccdc74061f5a8b916a2f.jpg',free:false},
+{n:1,cat:'branding',kw:'BRAND',t:'사업자의 브랜딩',d:'팔로워가 더 많은데 누구는 폐업하고, 누군가는 30개의 지점을 오픈했다.',topics:['차별화·타겟','인스타그램','브랜딩'],conds:['심화기획'],img:null,free:false}
+];
+var F_CATS=[{key:'marketing',label:'Marketing'},{key:'branding',label:'Branding'},{key:'content',label:'Content'}];
+var F_TOPICS=[
+{key:'무료',label:'무료',match:[]},{key:'인스타그램',label:'인스타그램',match:['인스타그램']},{key:'릴스',label:'릴스',match:['릴스']},{key:'카피·후킹',label:'카피·후킹',match:['카피·후킹']},{key:'브랜딩',label:'브랜딩',match:['브랜딩','차별화·타겟']},{key:'뇌과학',label:'뇌과학',match:['뇌과학']},{key:'블로그·SEO',label:'블로그·SEO',match:['블로그','SEO','AEO']},{key:'퍼널',label:'퍼널·전략',match:['퍼널','콘텐츠전략']},{key:'데이터',label:'데이터',match:['데이터']},{key:'AI',label:'AI·프롬프트',match:['AI']},{key:'타겟팅',label:'타겟·차별화',match:['차별화·타겟']}
+];
+var F_CONDS=[{key:'3분컷',label:'3분컷',match:['3분컷']},{key:'심화기획',label:'심화기획',match:['심화기획']},{key:'자동화',label:'AI/자동화',match:['자동화','AI']}];
+var CURATIONS=[
+{title:'신규 업데이트',layout:'hero',kits:[64,63,62,61,60,59,58,57,56,55,54,53,52,51,50,49,48,47,46,45,44,43]},
+{title:'내 브랜드가 노출이 되지 않는다면',layout:'bigcard',kits:[34,35,39,55,56]},
+{title:'오늘은 또 뭘 올리지',layout:'card',kits:[19,23,29,32,33]},
+{title:'인스타를 다시 처음부터',layout:'thumbrow',kits:[2,15,21,38]},
+{title:'팔로워와 매출 사이',layout:'bigcard',kits:[3,11,12,41,49,53]},
+{title:'마케팅, 다시 처음부터',layout:'thumbrow',kits:[6,13,22,50,52]},
+{title:'오프라인에서의 퍼널',layout:'bigcard',kits:[55,56,30,53,18,11]},
+{title:'무료: 0에서 1을 만드는 브랜딩 기초',layout:'card',kits:[41,23,30,36,34,1,37]},
+{title:'퍼스널 브랜딩의 진짜 구조',layout:'thumbrow',kits:[42,43,44,52,48]},
+{title:'상위 1% 마케터의 은밀한 무기, 뇌과학 기획법',layout:'bigcard',kits:[41,5,11,18,3]},
+{title:'왜 어떤 이야기에는 지갑이 열리는가',layout:'grid',kits:[51,50,49,4]},
+{title:'터지는 콘텐츠는 본능을 건든다',layout:'thumbrow',kits:[46,4,7,16,24]},
+{title:'AI로 일하는 사업자의 프롬프트',layout:'card',kits:[47,32,37,54,19]},
+{title:'사람들의 마음을 훔치는 영감',layout:'thumbrow',kits:[45,22,6,13]},
+{title:'인스타그램, 완전히 새로 엎기',layout:'grid',kits:[2,15,20,12]},
+{title:'마케팅의 답은 데이터에 있다',layout:'thumbrow',kits:[21,28,29,31,33]},
+{title:'1인이 팀을 구축하는, AI 자동화 세팅',layout:'bigcard',kits:[25,10,26,27,35]}
+];
+window.__RK={activeTab:'curation',ITEMS:ITEMS,CURATIONS:CURATIONS,CAT_COLORS:CAT_COLORS,CAT_LABEL:CAT_LABEL,CAT_DOT:CAT_DOT,CAT_LETTER:CAT_LETTER,F_CATS:F_CATS,F_TOPICS:F_TOPICS,F_CONDS:F_CONDS};
+})();
+</script>
+
+<!-- 위젯1: 탭 내비 JS + 스크롤 시 배경 전환 -->
+<script>
+(function(){
+  var tabNav=document.querySelector('.rk-tabs-nav');
+
+  document.querySelectorAll('.rk-tabs-btn').forEach(function(btn){
+    btn.addEventListener('click',function(){
+      document.querySelectorAll('.rk-tabs-btn').forEach(function(b){b.classList.remove('on');});
+      btn.classList.add('on');
+      var tab=btn.textContent.trim()==='큐레이션'?'curation':'explore';
+      window.__RK.activeTab=tab;
+      document.getElementById('tab-home').classList.toggle('show',tab==='curation');
+      document.getElementById('tab-explore').classList.toggle('show',tab==='explore');
+      window.scrollTo(0,0);
+    });
+  });
+
+  function checkTabSticky(){
+    var rect=tabNav.getBoundingClientRect();
+    tabNav.classList.toggle('rk-tabs-light',rect.top<=0);
+  }
+  window.addEventListener('scroll',checkTabSticky,{passive:true});
+  checkTabSticky();
+})();
+</script>
+
+<!-- 위젯2: 큐레이션 탭 JS -->
+<script>
+(function(){
+'use strict';
+var RK=window.__RK,ITEMS=RK.ITEMS,CURATIONS=RK.CURATIONS,CL=RK.CAT_LABEL,CC=RK.CAT_COLORS,CD=RK.CAT_DOT,CLT=RK.CAT_LETTER;
+function find(n){for(var i=0;i<ITEMS.length;i++){if(ITEMS[i].n===n)return ITEMS[i];}return null;}
+function pad(n){return n<10?'0'+n:String(n);}
+function pad3(n){return n<10?'00'+n:n<100?'0'+n:String(n);}
+function renderHero(cur){var items=cur.kits.map(find).filter(Boolean);var h='<div class="rk-cur-block-head"><span class="rk-cur-block-title">'+cur.title+'</span><span class="rk-cur-block-count">'+items.length+'</span></div><div class="rk-scroll-wrap"><div class="rk-pk-track">';items.forEach(function(it){var n=pad(it.n),u=pad3(it.n),fr=it.free?'<span class="pk-badge free">FREE</span>':'';h+='<a class="pk-card" href="'+(it.n===64?'rekit-detail.html':'#')+'"><div class="pk-card-bg"><img src="'+(it.img||'')+'" alt></div><div class="pk-card-inner"><div class="pk-card-top"><div class="pk-card-num">'+n+'</div>'+fr+'</div><div><div class="pk-card-cat">'+CL[it.cat]+'</div><div class="pk-card-title">'+it.t+'</div><div class="pk-card-desc">'+it.d+'</div><div class="pk-card-kw">'+it.kw+'</div></div></div></a>';});h+='</div></div>';return h;}
+function renderCard(cur){var items=cur.kits.map(find).filter(Boolean);var h='<div class="rk-cur-block"><div class="rk-cur-block-head"><span class="rk-cur-block-title">'+cur.title+'</span><span class="rk-cur-block-count">'+items.length+'</span></div><div class="rk-scroll-wrap"><div class="rk-cur-track">';items.forEach(function(it){var n=pad(it.n),u=pad3(it.n),d=CD[it.cat],l=CLT[it.cat],fr=it.free?'<span class="rf-kc-free">FREE</span>':'';if(it.img){h+='<a class="rf-kc rf-kc-img" href="'+(it.n===64?'rekit-detail.html':'#')+'"><div class="rf-kc-img-bg"><img src="'+it.img+'" alt></div><div class="rf-kc-inner"><div class="rf-kc-top"><div></div><div style="text-align:right"><div class="rf-kc-num">KIT '+n+'</div>'+fr+'</div></div><div style="flex:1"></div><div class="rf-kc-title">'+it.t+'</div><div class="rf-kc-desc">'+it.d+'</div><div class="rf-kc-foot"><div class="rf-kc-cat-tag"><span class="rf-kc-dot '+d+'">'+l+'</span><span class="rf-kc-cat-label">'+CL[it.cat]+'</span></div><span class="rf-kc-kw">'+it.kw+'</span></div></div></a>';}else{h+='<a class="rf-kc" href="'+(it.n===64?'rekit-detail.html':'#')+'"><div class="rf-kc-top"><div></div><div style="text-align:right"><div class="rf-kc-num">KIT '+n+'</div>'+fr+'</div></div><div style="flex:1"></div><div class="rf-kc-title">'+it.t+'</div><div class="rf-kc-desc">'+it.d+'</div><div class="rf-kc-foot"><div class="rf-kc-cat-tag"><span class="rf-kc-dot '+d+'">'+l+'</span><span class="rf-kc-cat-label">'+CL[it.cat]+'</span></div><span class="rf-kc-kw">'+it.kw+'</span></div></a>';}});h+='</div></div></div>';return h;}
+function renderBigcard(cur){var items=cur.kits.map(find).filter(Boolean);var h='<div class="rk-cur-block"><div class="rk-cur-block-head"><span class="rk-cur-block-title">'+cur.title+'</span><span class="rk-cur-block-count">'+items.length+'</span></div><div class="rk-scroll-wrap"><div class="rk-bigtrack">';items.forEach(function(it){var n=pad(it.n),u=pad3(it.n),d=CD[it.cat],l=CLT[it.cat],fr=it.free?'<span class="rf-kc-free">FREE</span>':'';h+='<a class="rk-bigcard" href="'+(it.n===64?'rekit-detail.html':'#')+'"><div class="rk-bigcard-img"><img src="'+(it.img||'')+'" alt="" loading="lazy"><div class="rk-bigcard-overlay"><span class="rf-kc-dot '+d+'">'+l+'</span><span>'+CL[it.cat]+'</span></div></div><div class="rk-bigcard-body"><div class="rk-bigcard-meta"><span class="rk-bigcard-num">KIT '+n+'</span>'+fr+'</div><div class="rk-bigcard-title">'+it.t+'</div><div class="rk-bigcard-desc">'+it.d+'</div></div></a>';});h+='</div></div></div>';return h;}
+function renderThumbrow(cur){var items=cur.kits.map(find).filter(Boolean);var h='<div class="rk-cur-block"><div class="rk-cur-block-head"><span class="rk-cur-block-title">'+cur.title+'</span><span class="rk-cur-block-count">'+items.length+'</span></div><div class="rk-thumblist">';items.forEach(function(it){var u=pad3(it.n),d=CD[it.cat],l=CLT[it.cat],fr=it.free?' <span class="rf-kc-free">FREE</span>':'';h+='<a class="rk-thumbrow" href="'+(it.n===64?'rekit-detail.html':'#')+'"><div class="rk-thumbrow-img"><img src="'+(it.img||'')+'" alt="" loading="lazy"><span class="rk-thumbrow-num">'+pad(it.n)+'</span></div><div class="rk-thumbrow-body"><div class="rk-thumbrow-title">'+it.t+fr+'</div><div class="rk-thumbrow-desc">'+it.d+'</div><div class="rk-thumbrow-meta"><span class="rf-kc-dot '+d+'">'+l+'</span><span>'+CL[it.cat]+'</span><span class="rk-thumbrow-kw">'+it.kw+'</span></div></div></a>';});h+='</div></div>';return h;}
+function renderGrid(cur){var items=cur.kits.map(find).filter(Boolean);var h='<div class="rk-cur-block"><div class="rk-cur-block-head"><span class="rk-cur-block-title">'+cur.title+'</span><span class="rk-cur-block-count">'+items.length+'</span></div><div class="rk-grid-wrap">';items.forEach(function(it){var n=pad(it.n),u=pad3(it.n),d=CD[it.cat],l=CLT[it.cat];h+='<a class="rk-gridcard" href="'+(it.n===64?'rekit-detail.html':'#')+'"><div class="rk-gridcard-img"><img src="'+(it.img||'')+'" alt=""><div class="rk-gridcard-overlay"><span class="rf-kc-dot '+d+'">'+l+'</span> '+CL[it.cat]+'</div></div><div class="rk-gridcard-body"><div class="rk-gridcard-num">KIT '+n+'</div><div class="rk-gridcard-title">'+it.t+'</div><div class="rk-gridcard-desc">'+it.d+'</div></div></a>';});h+='</div></div>';return h;}
+var RENDERERS={hero:renderHero,card:renderCard,bigcard:renderBigcard,thumbrow:renderThumbrow,grid:renderGrid};
+function build(){var heroEl=document.getElementById('rkCurHero'),blocksEl=document.getElementById('rkCurBlocks'),heroH='',blocksH='';CURATIONS.forEach(function(cur){var fn=RENDERERS[cur.layout];if(!fn)return;if(cur.layout==='hero')heroH+=fn(cur);else blocksH+=fn(cur);});heroEl.innerHTML=heroH;blocksEl.innerHTML=blocksH;var AL='<svg viewBox="0 0 14 14" fill="none"><path d="M9 2L4 7l5 5" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg>',AR='<svg viewBox="0 0 14 14" fill="none"><path d="M5 2l5 5-5 5" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg>';document.querySelectorAll('#tab-home .rk-scroll-wrap').forEach(function(wrap){var track=wrap.querySelector('.rk-cur-track,.rk-bigtrack,.rk-pk-track');if(!track)return;var bL=document.createElement('button');bL.className='rk-arr rk-arr-l hide';bL.innerHTML=AL;var bR=document.createElement('button');bR.className='rk-arr rk-arr-r';bR.innerHTML=AR;wrap.appendChild(bL);wrap.appendChild(bR);function st(){var c=track.querySelector('.rf-kc,.rk-bigcard,.pk-card');return c?c.offsetWidth:260;}function up(){bL.classList.toggle('hide',track.scrollLeft<10);bR.classList.toggle('hide',track.scrollLeft>=track.scrollWidth-track.clientWidth-10);}bL.addEventListener('click',function(){track.scrollBy({left:-st(),behavior:'smooth'});});bR.addEventListener('click',function(){track.scrollBy({left:st(),behavior:'smooth'});});track.addEventListener('scroll',up);setTimeout(up,200);});}
+build();
+})();
+</script>
+
+<!-- 위젯3: 탐색 탭 JS -->
+<script>
+(function(){
+'use strict';
+var RK=window.__RK,CAT_COLORS=RK.CAT_COLORS,CAT_LABEL=RK.CAT_LABEL,CAT_DOT=RK.CAT_DOT,CAT_LETTER=RK.CAT_LETTER,ITEMS=RK.ITEMS,F_CATS=RK.F_CATS,F_TOPICS=RK.F_TOPICS,F_CONDS=RK.F_CONDS;
+var sel={cat:new Set(),topic:new Set(),cond:new Set()},tmp={cat:new Set(),topic:new Set(),cond:new Set()},sortAsc=false,query='';
+function clone(s){return{cat:new Set(s.cat),topic:new Set(s.topic),cond:new Set(s.cond)};}
+function total(s){return s.cat.size+s.topic.size+s.cond.size;}
+function matchQ(item,q){if(!q)return true;q=q.toLowerCase().trim();var nq=q.replace(/re:?kit\s*/i,'').trim();if(nq&&/^\d+$/.test(nq)&&item.n===parseInt(nq,10))return true;var hay=[item.t,item.d,item.kw,String(item.n),CAT_LABEL[item.cat]].concat(item.topics).concat(item.conds).join(' ').toLowerCase();return hay.indexOf(q)!==-1;}
+function filterItems(s){return ITEMS.filter(function(item){if(s.cat.size>0&&!s.cat.has(item.cat))return false;if(s.topic.size>0){var found=false;F_TOPICS.forEach(function(ft){if(!s.topic.has(ft.key))return;if(ft.key==='무료'){if(item.free)found=true;return;}ft.match.forEach(function(m){if(item.topics.indexOf(m)!==-1)found=true;});});if(!found)return false;}if(s.cond.size>0){var found2=false;F_CONDS.forEach(function(fc){if(!s.cond.has(fc.key))return;fc.match.forEach(function(m){if(item.conds.indexOf(m)!==-1)found2=true;});});if(!found2)return false;}return true;});}
+function getFiltered(){var items=filterItems(sel);items=items.filter(function(i){return matchQ(i,query);});items.sort(function(a,b){return sortAsc?a.n-b.n:b.n-a.n;});return items;}
+function pad(n){return n<10?'0'+n:String(n);}
+function pad3(n){return n<10?'00'+n:n<100?'0'+n:String(n);}
+function buildRow(item){var num=pad(item.n),url=pad3(item.n),dot=CAT_DOT[item.cat],letter=CAT_LETTER[item.cat],thumbHtml;if(item.img){thumbHtml='<div class="rk-ex-thumb"><img src="'+item.img+'" alt="" loading="lazy"></div><span class="rk-ex-thumb-num">'+num+'</span>';}else{thumbHtml='<div class="rk-ex-thumb"><div class="rk-ex-thumb-ph" style="background:'+CAT_COLORS[item.cat]+'"><span>'+num+'</span></div></div>';}var freeHtml=item.free?'<span class="rk-ex-free">FREE</span>':'',tagsHtml='';item.topics.forEach(function(t){tagsHtml+='<span>'+t+'</span>';});return '<a class="rk-ex-row" href="'+(item.n===64?'rekit-detail.html':'#')+'">'+'<div class="rk-ex-thumb-wrap">'+thumbHtml+'</div>'+'<div class="rk-ex-body">'+'<div class="rk-ex-title">'+item.t+freeHtml+'</div>'+'<div class="rk-ex-desc">'+item.d+'</div>'+'<div class="rk-ex-foot">'+'<div class="rk-ex-meta"><span class="rf-kc-dot '+dot+'">'+letter+'</span><span>'+CAT_LABEL[item.cat]+'</span><span class="rk-ex-kw">'+item.kw+'</span></div>'+'<div class="rk-ex-tags">'+tagsHtml+'</div>'+'</div>'+'</div></a>';}
+function renderTopics(){var bar=document.getElementById('rkTopicBar');bar.innerHTML='';F_TOPICS.forEach(function(ft){var c=document.createElement('span');c.className='rk-tc'+(sel.topic.has(ft.key)?' on':'');c.textContent=ft.label;c.addEventListener('click',function(){if(sel.topic.has(ft.key))sel.topic.delete(ft.key);else sel.topic.add(ft.key);render();});bar.appendChild(c);});}
+function renderActive(){var con=document.getElementById('rkActiveChips');con.innerHTML='';var any=false;function add(label,group,key){any=true;var c=document.createElement('span');c.className='rk-active-chip';c.innerHTML=label+'<svg viewBox="0 0 24 24" width="12" height="12"><path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/></svg>';c.addEventListener('click',function(){sel[group].delete(key);render();});con.appendChild(c);}sel.cat.forEach(function(k){var f=F_CATS.find(function(c){return c.key===k;});if(f)add(f.label,'cat',k);});sel.topic.forEach(function(k){var f=F_TOPICS.find(function(c){return c.key===k;});if(f)add(f.label,'topic',k);});sel.cond.forEach(function(k){var f=F_CONDS.find(function(c){return c.key===k;});if(f)add(f.label,'cond',k);});if(any){var clr=document.createElement('button');clr.className='rk-active-clear';clr.textContent='Clear all';clr.addEventListener('click',function(){sel.cat.clear();sel.topic.clear();sel.cond.clear();render();});con.appendChild(clr);}con.classList.toggle('show',any);}
+function updateBadge(){var n=total(sel),badge=document.getElementById('rkFBadge'),btn=document.getElementById('rkFilterBtn');badge.textContent=n;btn.classList.toggle('has-filters',n>0);}
+function render(){var items=getFiltered(),list=document.getElementById('rkExList');if(!items.length){list.innerHTML='<div style="text-align:center;padding:60px 0;color:#bbb;font-size:14px">검색 결과가 없습니다</div>';}else{list.innerHTML=items.map(buildRow).join('');}document.getElementById('rkCount').textContent=items.length+'개의 자료';renderTopics();renderActive();updateBadge();}
+var overlay=document.getElementById('rkModalOverlay');
+function openModal(){tmp=clone(sel);renderModalChips();updateModalCount();overlay.classList.add('open');document.body.style.overflow='hidden';requestAnimationFrame(function(){requestAnimationFrame(function(){overlay.classList.add('visible');});});}
+function closeModal(){overlay.classList.remove('visible');setTimeout(function(){overlay.classList.remove('open');document.body.style.overflow='';},200);}
+function applyModal(){sel=clone(tmp);closeModal();render();}
+function clearModal(){tmp.cat.clear();tmp.topic.clear();tmp.cond.clear();renderModalChips();updateModalCount();}
+function buildChipGroup(id,items,group){var con=document.getElementById(id);con.innerHTML='';items.forEach(function(item){var c=document.createElement('span');c.className='rk-chip'+(tmp[group].has(item.key)?' on':'');c.textContent=item.label;c.addEventListener('click',function(){if(tmp[group].has(item.key))tmp[group].delete(item.key);else tmp[group].add(item.key);c.classList.toggle('on',tmp[group].has(item.key));updateModalCount();});con.appendChild(c);});}
+function renderModalChips(){buildChipGroup('mcCat',F_CATS,'cat');buildChipGroup('mcTopic',F_TOPICS,'topic');buildChipGroup('mcCond',F_CONDS,'cond');}
+function updateModalCount(){document.getElementById('rkModalApply').textContent=filterItems(tmp).length+'개 RE:KIT 보기';}
+overlay.addEventListener('click',function(e){if(e.target===overlay)closeModal();});
+document.getElementById('rkFilterBtn').addEventListener('click',openModal);
+document.getElementById('rkModalClose').addEventListener('click',closeModal);
+document.getElementById('rkModalClear').addEventListener('click',clearModal);
+document.getElementById('rkModalApply').addEventListener('click',applyModal);
+document.getElementById('rkQ').addEventListener('input',function(){query=this.value;render();});
+document.getElementById('rkSort').addEventListener('click',function(){sortAsc=!sortAsc;this.childNodes[0].textContent=sortAsc?'오래된순 ':'최신순 ';render();});
+render();
+})();
+</script>
+
+</body>
+</html>

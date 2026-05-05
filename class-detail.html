@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5, user-scalable=yes">
+<title>CLASS 01 — 브랜딩이 사업이 되는 순간</title>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/gh/sun-typeface/SUIT@2/fonts/variable/woff2/SUIT-Variable.css" rel="stylesheet">
+
+<style>
+*,*::before,*::after{box-sizing:border-box!important}
+html,body{overflow-x:hidden!important;margin:0;padding:0}
+body{font-family:'Pretendard Variable','Pretendard',-apple-system,sans-serif;background:#fff;color:#1a1a1a;-webkit-font-smoothing:antialiased}
+a{text-decoration:none;color:inherit}button{font-family:inherit;border:none;cursor:pointer;background:none}
+:root{--accent:#CD4900;--accent-rgb:205,73,0;--accent-light:rgba(205,73,0,0.08);--text:#1a1a1a;--text-secondary:rgba(0,0,0,0.5);--text-tertiary:rgba(0,0,0,0.3);--border:rgba(0,0,0,0.08);--bg:#fff;--bg-card:rgba(0,0,0,0.025);--orange:#e75519;--pad:48px}
+
+/* ═══ 읽기 GNB (진행률 + 하이라이트만, 저장 없음) ═══ */
+.read-gnb{position:fixed;top:0;left:0;right:0;z-index:1000;background:#fff;border-bottom:1px solid #eee}
+.read-gnb-inner{max-width:820px;margin:0 auto;height:48px;display:flex;align-items:center;padding:0 16px;gap:12px}
+.read-gnb-back{display:flex;align-items:center;justify-content:center;width:32px;height:32px;flex-shrink:0;color:#999;transition:color .2s}
+.read-gnb-back:hover{color:#1a1a1a}
+.read-gnb-back svg{width:20px;height:20px}
+.read-gnb-progress-wrap{flex:1;display:flex;align-items:center;gap:10px;min-width:0}
+.read-gnb-progress-bar{flex:1;height:3px;background:#eee;border-radius:2px;overflow:hidden}
+.read-gnb-progress-fill{height:100%;background:var(--orange);border-radius:2px;width:0%;transition:width .3s}
+.read-gnb-progress-pct{font-family:'SUIT Variable',sans-serif;font-size:12px;font-weight:700;color:#bbb;min-width:32px;text-align:right;flex-shrink:0}
+.read-gnb-actions{display:flex;align-items:center;gap:4px;flex-shrink:0}
+.read-gnb-btn{display:flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:8px;color:#999;transition:all .15s}
+.read-gnb-btn:hover{background:#f5f5f5;color:#1a1a1a}
+.read-gnb-btn.active{color:var(--orange)}
+.read-gnb-btn svg{width:20px;height:20px}
+
+/* 하이라이트 */
+.hl-toolbar{position:fixed;z-index:2000;background:#1a1a1a;border-radius:8px;padding:6px 12px;display:none;align-items:center;gap:8px;box-shadow:0 4px 16px rgba(0,0,0,.2);transform:translateX(-50%)}
+.hl-toolbar.show{display:flex}
+.hl-toolbar-btn{display:flex;align-items:center;gap:5px;color:#fff;font-size:12px;font-weight:600;padding:4px 8px;border-radius:4px;transition:opacity .15s}
+.hl-toolbar-btn:hover{opacity:.7}
+.hl-toolbar-btn svg{width:16px;height:16px}
+.hl-toolbar::after{content:'';position:absolute;bottom:-5px;left:50%;transform:translateX(-50%);width:10px;height:10px;background:#1a1a1a;clip-path:polygon(50% 100%,0 0,100% 0)}
+mark.user-highlight{background:rgba(205,73,0,.15);padding:0 1px;border-radius:2px}
+body.hl-mode-on .body-section{cursor:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23CD4900' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 20h9'/%3E%3Cpath d='M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z'/%3E%3C/svg%3E") 2 22, text}
+
+/* 토스트 */
+.rf-toast{position:fixed;bottom:50%;left:50%;transform:translate(-50%,50%) scale(.95);background:#1a1a1a;color:#fff;padding:20px 32px;border-radius:14px;font-size:15px;font-weight:600;z-index:9999;opacity:0;pointer-events:none;transition:all .25s ease;text-align:center;box-shadow:0 8px 32px rgba(0,0,0,.25)}
+.rf-toast.show{opacity:1;transform:translate(-50%,50%) scale(1)}
+.rf-toast-icon{font-size:28px;margin-bottom:8px}
+
+/* 하단 네비 */
+.rf-bottom-nav{display:none;position:fixed;bottom:0;left:0;right:0;z-index:9998;background:#fff;border-top:1px solid #E8E8E8;padding:8px 0 calc(8px + env(safe-area-inset-bottom,0px))}
+.rf-bottom-nav-inner{display:flex;justify-content:space-around;align-items:center;width:100%}
+.rf-bottom-nav-item{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;cursor:default;flex:1;background:none;border:none;outline:none;color:#363636;-webkit-tap-highlight-color:transparent;text-decoration:none}
+.rf-bottom-nav-item svg{width:20px;height:20px}
+.rf-bottom-nav-item svg path,.rf-bottom-nav-item svg line{stroke:currentColor}
+.rf-bottom-nav-label{font-size:10px;font-weight:500;letter-spacing:-.02em;line-height:1.2em;color:inherit;white-space:nowrap}
+.rf-bottom-nav-item.rf-active{color:#e75519}
+.rf-bottom-nav-item.rf-active .rf-bottom-nav-label{font-weight:600}
+@media(max-width:768px){.rf-bottom-nav{display:block}body{padding-bottom:calc(64px + env(safe-area-inset-bottom,0px))}}
+
+/* ═══ 히어로 ═══ */
+.hero-section{max-width:1000px;margin:0 auto;padding:0 24px}
+.hero-mesh{width:calc(100% + 48px);margin-left:-24px;height:320px;position:relative;overflow:hidden;margin-top:48px;background:#1a1a1a;z-index:0}
+.hero-mesh .mesh-bg{position:absolute;inset:0;background:url('https://cdn.imweb.me/upload/S202505026d116fc085279/d78a42076cd36.png') center/cover no-repeat}
+.hero-mesh .grain{position:absolute;inset:0;opacity:.07;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");background-size:128px;mix-blend-mode:overlay}
+.hero-mesh .hero-brand{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;color:#fff}
+.hero-mesh .hero-brand-label{font-size:13px;margin-bottom:6px;color:rgba(255,255,255,.6)}
+.hero-mesh .hero-brand-name{font-size:22px;letter-spacing:.22em;line-height:1;color:#fff}
+.hero-mesh .hero-brand-name span{font-size:44px;letter-spacing:.04em;margin-top:2px;display:block}
+.hero-title-area{display:grid;grid-template-columns:1fr 1fr;gap:32px;align-items:end;padding:56px 0 0}
+.hero-title-main{font-family:'SUIT',sans-serif;font-size:24px;font-weight:800;line-height:1.3;letter-spacing:-.04em;color:var(--text);word-break:keep-all;margin:0}
+.hero-title-desc{font-size:16px;line-height:1.8;color:var(--text-secondary);padding-bottom:4px}
+.section-divider{border:none;height:1px;background:var(--border);margin:48px 0}
+.contents-nav{display:grid;grid-template-columns:auto 1fr;gap:0 64px;align-items:start}
+.contents-nav-label{font-family:'SUIT',sans-serif;font-size:32px;font-weight:700;color:var(--text);letter-spacing:-.03em;padding-top:4px}
+.contents-nav-list{list-style:none;display:flex;flex-direction:column;gap:6px;padding-top:10px}
+.contents-nav-list li{display:flex;align-items:baseline;gap:14px;font-size:16px;font-weight:600;color:var(--text);line-height:1.6;cursor:pointer;transition:color .2s}
+.contents-nav-list li:hover{color:var(--accent)}
+.contents-nav-list .cnl-num{font-family:'SUIT',sans-serif;font-size:13px;font-weight:700;color:var(--text-tertiary);min-width:20px}
+
+/* ═══ 바디 ═══ */
+.body-section{max-width:750px;margin:0 auto;padding:80px 24px 0}
+.body-p{margin:0 0 32px 0;line-height:1.9;font-size:16px;color:var(--text)}
+.body-p strong{font-weight:700}
+.sub-heading{font-size:16px;font-weight:700;color:var(--accent);letter-spacing:-.01em;margin:0;padding:0;line-height:1.6}
+.chapter-block{padding-top:80px;margin-bottom:36px}
+.chapter-block:first-child{padding-top:0}
+.chapter-heading{display:flex;flex-direction:column;gap:2px}
+.chapter-heading .ch-num{font-family:'SUIT',sans-serif;font-size:11px;font-weight:700;color:var(--accent);letter-spacing:1.5px;text-transform:uppercase;opacity:.8}
+.chapter-heading .ch-title{font-family:'SUIT',sans-serif;font-size:28px;font-weight:800;line-height:1.25;letter-spacing:-.04em;color:var(--text);word-break:keep-all}
+.underline-hl{background:linear-gradient(180deg,transparent 55%,rgba(var(--accent-rgb),.18) 55%);background-size:0% 100%;background-repeat:no-repeat;padding:0 2px;font-weight:700;transition:background-size .65s cubic-bezier(.4,0,.2,1)}
+.underline-hl.visible{background-size:100% 100%}
+.indent-blk{padding-left:20px;border-left:2px solid rgba(var(--accent-rgb),.25);color:var(--text-secondary);font-style:italic;line-height:2;margin:64px 0}
+.end-div{border:none;height:1px;background:var(--border);margin:64px 0}
+.note-statement{margin:64px 0;padding:0;text-align:center;opacity:0;transform:translateY(16px);transition:all .6s ease}
+.note-statement.visible{opacity:1;transform:translateY(0)}
+.note-statement-inner{display:inline-block;text-align:left}
+.note-line{display:block;font-size:21px;font-weight:700;line-height:1;color:var(--text);letter-spacing:-.02em;padding:14px 0;border-bottom:1px solid rgba(0,0,0,.15)}
+.note-line .note-accent{color:var(--accent)}
+.note-line .note-muted{color:var(--text-secondary);font-weight:500}
+.bubble-container{display:flex;flex-direction:column;gap:6px;max-width:80%;margin:56px auto}
+.bubble-card{padding:10px 16px;font-size:14px;line-height:1.55;opacity:0;transform:translateY(10px);transition:all .35s cubic-bezier(.16,1,.3,1);border-radius:18px 18px 18px 4px;background:#ede8e2;color:var(--text)}
+.bubble-card.right{align-self:flex-end;background:#333;color:rgba(255,255,255,.9);border-radius:18px 18px 4px 18px}
+.bubble-card.visible{opacity:1;transform:translateY(0)}
+.step-box-group{display:flex;flex-direction:column;gap:0;margin:48px 0;padding-left:16px;border-left:1.5px solid rgba(0,0,0,.06);opacity:0;transform:translateY(16px);transition:all .6s ease}
+.step-box-group.visible{opacity:1;transform:translateY(0)}
+.step-box{padding:10px 0}
+.step-box-title{font-size:11px;font-weight:600;color:rgba(0,0,0,.25);margin-bottom:2px}
+.step-box-desc{font-size:14px;line-height:1.6;color:rgba(0,0,0,.6)}
+.step-box.step-box-accent{padding-top:14px;border-top:1px solid rgba(0,0,0,.06)}
+.step-box.step-box-accent .step-box-title{color:#e75519}
+.step-box.step-box-accent .step-box-desc{color:#1a1a1a;font-weight:600}
+.bc-compare-table{margin:64px 0}
+.bc-compare-table .bct-row{display:grid;grid-template-columns:1fr 72px 1fr;align-items:center;border-bottom:1px solid var(--border)}
+.bc-compare-table .bct-cell-label{text-align:center;font-size:11px;font-weight:700;color:var(--text-tertiary);letter-spacing:.5px;text-transform:uppercase;line-height:1.4}
+.bc-compare-table .bct-cell{font-size:15px;line-height:1.6;padding:14px 0;color:var(--text)}
+.bc-compare-table .bct-cell[data-col="a"]{text-align:center;padding-right:12px}
+.bc-compare-table .bct-cell[data-col="b"]{text-align:center;padding-left:12px}
+.bc-compare-table .bct-cell .bct-em{font-weight:700}
+.bc-compare-table .bct-cell-muted{color:var(--text-tertiary)!important;font-size:12px!important}
+.page-cta{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:18px 28px;background:var(--accent);border:none;border-radius:999px;text-decoration:none;color:inherit;transition:opacity .2s}
+.page-cta:hover{opacity:.88}
+.cta-label{font-size:11px;font-weight:700;color:#fff;letter-spacing:1px;display:block;margin-bottom:3px}
+.cta-title{font-size:15px;font-weight:600;color:rgba(255,255,255,.85)}
+.cta-arrow{width:14px;height:14px;color:rgba(255,255,255,.7);flex-shrink:0}
+.list-cta{display:flex;align-items:center;justify-content:center;gap:8px;margin:16px 0 0;padding:18px 28px;background:#ede8e2!important;border:none;border-radius:999px;text-decoration:none!important;color:#666!important;font-size:14px;font-weight:600;transition:opacity .2s;width:100%}
+.list-cta:hover{opacity:.85}
+.list-cta svg{width:14px;height:14px;color:#666!important;stroke:#666!important}
+.bottom-pad{height:120px}
+@media(max-width:768px){
+  .hero-mesh{height:240px}
+  .hero-mesh .hero-brand-name{font-size:16px}
+  .hero-mesh .hero-brand-name span{font-size:32px}
+  .hero-title-area{grid-template-columns:1fr;gap:20px;padding:40px 0 0}
+  .body-section{padding:60px 20px 0}
+  .chapter-block{padding-top:56px}
+  .chapter-heading .ch-title{font-size:24px}
+  .note-line{font-size:17px;padding:12px 0}
+  .bubble-container{max-width:100%}
+  .contents-nav{grid-template-columns:1fr;gap:24px}
+  .bc-compare-table .bct-row{grid-template-columns:1fr 52px 1fr}
+  .bc-compare-table .bct-cell{font-size:13px;padding:12px 0}
+}
+</style>
+</head>
+<body>
+
+<!-- ═══ 읽기 GNB (저장 버튼 없음) ═══ -->
+<div class="read-gnb" id="readGnb"><div class="read-gnb-inner">
+  <a class="read-gnb-back" href="classes.html?detail=brand"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></a>
+  <div class="read-gnb-progress-wrap">
+    <div class="read-gnb-progress-bar"><div class="read-gnb-progress-fill" id="progressFill"></div></div>
+    <span class="read-gnb-progress-pct" id="progressPct">0%</span>
+  </div>
+  <div class="read-gnb-actions">
+    <button class="read-gnb-btn" id="btnHighlight" title="하이라이트" onclick="toggleHighlightMode()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+    </button>
+  </div>
+</div></div>
+
+<!-- 하이라이트 툴바 -->
+<div class="hl-toolbar" id="hlToolbar"><button class="hl-toolbar-btn" onclick="applyHighlight(event)" onmousedown="event.preventDefault()" ontouchstart="event.stopPropagation()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>하이라이트 추가</button></div>
+
+<!-- 토스트 -->
+<div class="rf-toast" id="rfToast"><div class="rf-toast-icon"></div><div class="rf-toast-msg"></div></div>
+
+<!-- ═══ 히어로 ═══ -->
+<section class="hero-section">
+  <div class="hero-mesh">
+    <div class="mesh-bg"></div>
+    <div class="grain"></div>
+    <div class="hero-brand">
+      <div class="hero-brand-label">BRANDING</div>
+      <div class="hero-brand-name">CLASS <span>01</span></div>
+    </div>
+  </div>
+  <div class="hero-title-area">
+    <h1 class="hero-title-main">브랜딩이 사업이<br>되는 순간</h1>
+    <p class="hero-title-desc">모두가 같은 공식을 쓰면서, 공식 자체가 힘을 잃었습니다.<br>트렌드는 전술이에요. 전략 없는 전술은 방향이 없습니다.</p>
+  </div>
+  <hr class="section-divider">
+  <div class="contents-nav">
+    <span class="contents-nav-label">Contents</span>
+    <ul class="contents-nav-list">
+      <li onclick="scrollToSection('ch01')"><span class="cnl-num">01</span>대부분이 생각하는 브랜딩은 틀렸다</li>
+      <li onclick="scrollToSection('ch02')"><span class="cnl-num">02</span>기준 없이 내린 결정들</li>
+      <li onclick="scrollToSection('ch03')"><span class="cnl-num">03</span>기획이 없으면 할 수 있는 말이 없습니다</li>
+      <li onclick="scrollToSection('ch04')"><span class="cnl-num">04</span>기획의 역할</li>
+      <li onclick="scrollToSection('ch05')"><span class="cnl-num">05</span>이렇게 진행됩니다</li>
+      <li onclick="scrollToSection('ch06')"><span class="cnl-num">06</span>다음 Class부터 직접 작성합니다</li>
+    </ul>
+  </div>
+  <hr class="section-divider">
+</section>
+
+<!-- ═══ 바디 (축약본 — 챕터 1~2 샘플) ═══ -->
+<div class="body-section" id="classBody">
+
+<div class="chapter-block" id="ch01">
+  <div class="chapter-heading"><span class="ch-num">CHAPTER 01</span><h2 class="ch-title">대부분이 생각하는 브랜딩은 틀렸다</h2></div>
+</div>
+
+<p class="body-p">이건 퍼스널 브랜딩으로 인생을 바꿀 수 있다는 자기계발서가 아닙니다. 사업을 하고 있거나, 준비하고 있다면 — 마케팅 전에 반드시 거쳐야 할 <strong>기초 공사</strong>를 다루는 실용서에 가깝습니다.</p>
+
+<p class="body-p">큰 회사, 많은 직원, 큰 광고비 — 그게 성공의 기본 공식이던 때가 있었어요. 하지만 지금은 달라졌죠. <span class="underline-hl">자기가 뭘 하는 사람인지 명확한 한 사람이, 모호하게 크기만 한 조직보다 성공할 수 있는 시대.</span></p>
+
+<p class="body-p">왜냐하면 지금은 3개월만 지나도 사람들이 반응하는 방식이 달라지거든요. 조직이 작을수록 오늘 결정하고, 내일 당장 실행할 수 있습니다.</p>
+
+<p class="body-p">하지만 그냥 '작으면 된다'는 아니에요. 많이 팔 수 없으면 <strong>비싸게 팔아야 합니다.</strong> 비싸게 팔려면 합당한 이유가 있어야 하고요. 어느 쪽이든, <span class="underline-hl">그 이유를 만드는 게 브랜딩이고, 그 과정이 이 클래스입니다.</span></p>
+
+<hr class="end-div">
+
+<p class="sub-heading">브랜딩에 대한 두 가지 오해</p>
+
+<p class="body-p">'브랜딩'이라는 단어를 들으면 사람들이 먼저 떠올리는 게 있어요. 예쁜 로고, 멋진 인테리어, 화려한 피드. 하지만 그건 브랜딩이 아닙니다.</p>
+
+<p class="body-p">브랜딩도 마찬가지입니다. 꼭 특별한 스펙이 있거나 남들보다 뛰어나야만 브랜딩이 되는 게 아니에요. 지금 가진 것을 어디에, 어떻게 놓느냐. 그게 브랜딩이죠.</p>
+
+<div class="note-statement">
+  <div class="note-statement-inner">
+    <span class="note-line">"SNS를 하다 보면 사업이 잘되겠지"</span>
+    <span class="note-line"><span class="note-accent">"사업이 잘되기 위해 SNS를 한다"</span></span>
+    <span class="note-line"><span class="note-muted">같아 보이지만 완전히 다른 접근입니다.</span></span>
+  </div>
+</div>
+
+<p class="body-p">브랜딩 콘텐츠와 그냥 SNS의 차이는 간단해요. <strong>방향</strong>이 있느냐 없느냐.</p>
+
+<hr class="end-div">
+
+<div class="chapter-block" id="ch02">
+  <div class="chapter-heading"><span class="ch-num">CHAPTER 02</span><h2 class="ch-title">기준 없이 내린 결정들</h2></div>
+</div>
+
+<p class="body-p">당신은 아마 능력 있는 사람일 거예요. 하지만 냉정히 전문성과 사업성은 그다지 관련이 없습니다.</p>
+
+<div class="indent-blk">"예전에는 이렇게 하니까 됐는데..."<br>"직원일 때는 이 정도면 충분했는데..."</div>
+
+<p class="body-p">직원일 때는 <strong>나의 전문성에 맞는 업무</strong>만 하면 됐습니다. 하지만 사업을 시작하면 전부 뒤집힙니다.</p>
+
+<div class="bubble-container">
+  <div class="bubble-card left">"가격은요?" — "옆 동네 보고 비슷하게요."</div>
+  <div class="bubble-card left">"인스타 콘텐츠는요?" — "그때그때 생각나는 거요."</div>
+  <div class="bubble-card left">"이벤트는요?" — "다들 하길래요."</div>
+</div>
+
+<p class="body-p"><strong>자기 기준이 없으니까</strong> 다른 곳에서 가져오는 겁니다.</p>
+
+<div class="note-statement">
+  <div class="note-statement-inner">
+    <span class="note-line">기준 없는 실행은 <span class="note-muted">삽질</span>입니다.</span>
+    <span class="note-line">기준 있는 실행은 <span class="note-accent">실험</span>이에요.</span>
+  </div>
+</div>
+
+<hr class="end-div">
+
+<div class="chapter-block" id="ch03">
+  <div class="chapter-heading"><span class="ch-num">CHAPTER 03</span><h2 class="ch-title">기획이 없으면 할 수 있는 말이 없습니다</h2></div>
+</div>
+
+<p class="body-p">사람들은 결정하기 전에 충분히 정보를 수집해요. 인스타를 보고, 후기를 읽고, 가격을 비교하고. 전화를 건 시점에서는 이미 "여기서 할래"가 정해져 있는 거죠. <strong>콘텐츠가 이미 고객을 설득한</strong> 거예요.</p>
+
+<p class="body-p"><span class="underline-hl">기획이 없으면 할 수 있는 말이 이것뿐이거든요.</span> "프리미엄 관리", "업계 1위", "최고 만족도!"</p>
+
+<hr class="end-div">
+
+<div class="chapter-block" id="ch04">
+  <div class="chapter-heading"><span class="ch-num">CHAPTER 04</span><h2 class="ch-title">기획의 역할</h2></div>
+</div>
+
+<div class="note-statement">
+  <div class="note-statement-inner">
+    <span class="note-line">기획서는 <span class="note-muted">"있어 보이려고"</span> 쓰는 게 아닙니다.</span>
+    <span class="note-line"><span class="note-accent">망하지 않으려고 쓰는 거죠.</span></span>
+  </div>
+</div>
+
+<p class="body-p"><span class="underline-hl">개입하지 않으면 무질서해지는 게 자연 법칙이니까요.</span> 기획서가 그 역할을 해요.</p>
+
+<div class="note-statement">
+  <div class="note-statement-inner">
+    <span class="note-line">기획서는 <span class="note-muted">"뭘 할지"</span> 정하는 게 아닙니다.</span>
+    <span class="note-line"><span class="note-accent">"뭘 하지 않을지"</span> 정하는 겁니다.</span>
+  </div>
+</div>
+
+<hr class="end-div">
+
+<div class="chapter-block" id="ch05">
+  <div class="chapter-heading"><span class="ch-num">CHAPTER 05</span><h2 class="ch-title">이렇게 진행됩니다</h2></div>
+</div>
+
+<p class="body-p">50페이지짜리 문서가 필요한 게 아니에요. 이 워크북에 있는 9가지 질문에 답하면 돼요. 그게 당신의 <strong>사업 기획서</strong>가 되고, 그게 당신의 브랜드가 됩니다.</p>
+
+<div class="step-box-group">
+  <div class="step-box"><div class="step-box-title">1단계 — 정의</div><div class="step-box-desc">나 자신을 정의하기 (Class 02~03)</div></div>
+  <div class="step-box"><div class="step-box-title">2단계 — 시장</div><div class="step-box-desc">시장과 타겟 정하기 (Class 04~05)</div></div>
+  <div class="step-box"><div class="step-box-title">3단계 — 전달</div><div class="step-box-desc">고객이 느낄 수 있는 형태로 만들기 (Class 06~07)</div></div>
+  <div class="step-box"><div class="step-box-title">4단계 — 적용</div><div class="step-box-desc">실제 채널에 적용하기 (Class 08~09)</div></div>
+</div>
+
+<hr class="end-div">
+
+<div class="chapter-block" id="ch06">
+  <div class="chapter-heading"><span class="ch-num">CHAPTER 06</span><h2 class="ch-title">다음 Class부터 직접 작성합니다</h2></div>
+</div>
+
+<p class="body-p">Class 02부터 각 Class마다 워크북 질문이 나옵니다. 9가지 질문에 답하면 머릿속에 없던 기준이 만들어지고, 그 기준을 채널에 적용하면 모든 사람이 그렇다고 느끼게 됩니다.</p>
+
+<hr class="end-div">
+
+<div style="display:flex;flex-direction:column;gap:12px;margin:0 0 0;">
+  <a class="page-cta" href="#">
+    <div><span class="cta-label">NEXT</span><span class="cta-title">Branding Class 02: 한 줄 정의 →</span></div>
+    <svg class="cta-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+  </a>
+</div>
+
+<a class="list-cta" href="classes.html?detail=brand">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+  전체 클래스 목록 보기
+</a>
+
+</div>
+
+<div class="bottom-pad"></div>
+
+<!-- ═══ 하단 네비 ═══ -->
+<nav class="rf-bottom-nav"><div class="rf-bottom-nav-inner">
+  <a href="rekit.html" class="rf-bottom-nav-item"><svg viewBox="0 0 20 23" fill="none"><path d="M1.27 5.95795L10 11.0079L18.73 5.95795M10 21.0779V10.9979M19 14.9979V6.99795C18.9996 6.64722 18.9071 6.30276 18.7315 5.99911C18.556 5.69546 18.3037 5.44331 18 5.26795L11 1.26795C10.696 1.09241 10.3511 1 10 1C9.64893 1 9.30404 1.09241 9 1.26795L2 5.26795C1.69626 5.44331 1.44398 5.69546 1.26846 5.99911C1.09294 6.30276 1.00036 6.64722 1 6.99795V14.9979C1.00036 15.3487 1.09294 15.6931 1.26846 15.9968C1.44398 16.3004 1.69626 16.5526 2 16.7279L9 20.7279C9.30404 20.9035 9.64893 20.9959 10 20.9959C10.3511 20.9959 10.696 20.9035 11 20.7279L18 16.7279C18.3037 16.5526 18.556 16.3004 18.7315 15.9968C18.9071 15.6931 18.9996 15.3487 19 14.9979Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="rf-bottom-nav-label">RE:KIT</span></a>
+  <a href="classes.html" class="rf-bottom-nav-item rf-active"><svg viewBox="0 0 24 24" fill="none"><path d="M4 19.5V4.5C4 3.83696 4.26339 3.20107 4.73223 2.73223C5.20107 2.26339 5.83696 2 6.5 2H20V22H6.5C5.83696 22 5.20107 21.7366 4.73223 21.2678C4.26339 20.7989 4 20.163 4 19.5Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M4 19.5C4 18.837 4.26339 18.2011 4.73223 17.7322C5.20107 17.2634 5.83696 17 6.5 17H20" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="rf-bottom-nav-label">CLASS</span></a>
+  <a href="#" class="rf-bottom-nav-item"><svg viewBox="0 0 24 24" fill="none"><path d="M21 15C21 15.5304 20.7893 16.0391 20.4142 16.4142C20.0391 16.7893 19.5304 17 19 17H7L3 21V5C3 4.46957 3.21071 3.96086 3.58579 3.58579C3.96086 3.21071 4.46957 3 5 3H19C19.5304 3 20.0391 3.21071 20.4142 3.58579C20.7893 3.96086 21 4.46957 21 5V15Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="rf-bottom-nav-label">NAKTA AI</span></a>
+  <a href="mypage.html" class="rf-bottom-nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21V19C20 17.9391 19.5786 16.9217 18.8284 16.1716C18.0783 15.4214 17.0609 15 16 15H8C6.93913 15 5.92172 15.4214 5.17157 16.1716C4.42143 16.9217 4 17.9391 4 19V21"/><circle cx="12" cy="7" r="4"/></svg><span class="rf-bottom-nav-label">MY</span></a>
+</div></nav>
+
+<!-- ═══ SCRIPTS ═══ -->
+<script>
+(function(){
+  function showToast(icon,msg){var t=document.getElementById('rfToast');t.querySelector('.rf-toast-icon').textContent=icon;t.querySelector('.rf-toast-msg').textContent=msg;t.classList.add('show');setTimeout(function(){t.classList.remove('show');},1800);}
+
+  /* 진행률 */
+  var fill=document.getElementById('progressFill'),pct=document.getElementById('progressPct'),maxP=0;
+  function upd(){var s=window.scrollY,d=document.documentElement.scrollHeight-window.innerHeight;if(d<=0)return;var c=Math.min(Math.round(s/d*100),100);if(c>maxP)maxP=c;fill.style.width=maxP+'%';pct.textContent=maxP+'%';pct.style.color=maxP>=95?'#16a34a':maxP>0?'var(--orange)':'#bbb';}
+  window.addEventListener('scroll',upd,{passive:true});upd();
+
+  /* 하이라이트 */
+  var hlMode=false;
+  window.toggleHighlightMode=function(){hlMode=!hlMode;document.getElementById('btnHighlight').classList.toggle('active',hlMode);document.body.classList.toggle('hl-mode-on',hlMode);if(hlMode)showToast('\u270F\uFE0F','\uD558\uC774\uB77C\uC774\uD2B8 \uBAA8\uB4DC ON');};
+  var tb=document.getElementById('hlToolbar');
+  function showToolbar(){var s=window.getSelection();if(!s||!s.toString().trim()){tb.classList.remove('show');return;}var bd=document.getElementById('classBody');if(!bd||!bd.contains(s.anchorNode))return;var r=s.getRangeAt(0).getBoundingClientRect();var left=Math.max(60,Math.min(r.left+r.width/2,window.innerWidth-60));tb.style.left=left+'px';tb.style.top=(r.top+window.scrollY-42)+'px';tb.classList.add('show');}
+  document.addEventListener('mouseup',function(){if(!hlMode){tb.classList.remove('show');return;}showToolbar();});
+  var selTimer=null;document.addEventListener('selectionchange',function(){if(!hlMode)return;clearTimeout(selTimer);selTimer=setTimeout(function(){var s=window.getSelection();if(!s||s.isCollapsed||!s.toString().trim())return;var bd=document.getElementById('classBody');if(!bd||!bd.contains(s.anchorNode))return;showToolbar();},400);});
+  document.addEventListener('mousedown',function(e){if(!tb.contains(e.target))tb.classList.remove('show');});
+  document.addEventListener('touchstart',function(e){if(tb.contains(e.target))return;setTimeout(function(){tb.classList.remove('show');},200);},{passive:true});
+  window.applyHighlight=function(e){if(e)e.preventDefault();var s=window.getSelection();if(!s||!s.toString().trim())return;try{var r=s.getRangeAt(0),m=document.createElement('mark');m.className='user-highlight';try{r.surroundContents(m);}catch(ex){m.appendChild(r.extractContents());r.insertNode(m);}}catch(err){}s.removeAllRanges();tb.classList.remove('show');showToast('\u2713','\uD558\uC774\uB77C\uC774\uD2B8\uC5D0 \uC800\uC7A5\uB418\uC5C8\uC2B5\uB2C8\uB2E4.');};
+
+  /* 섹션 스크롤 */
+  window.scrollToSection=function(id){var el=document.getElementById(id);if(!el)return;var top=el.getBoundingClientRect().top+window.pageYOffset-68;window.scrollTo({top:top,behavior:'smooth'});};
+
+  /* 애니메이션 */
+  var obs=new IntersectionObserver(function(e){e.forEach(function(x){if(x.isIntersecting){x.target.classList.add('visible');obs.unobserve(x.target);}});},{threshold:.3});
+  document.querySelectorAll('.step-box-group,.note-statement,.bubble-container,.underline-hl').forEach(function(el){obs.observe(el);});
+  var bObs=new IntersectionObserver(function(entries){entries.forEach(function(entry){if(entry.isIntersecting){entry.target.querySelectorAll('.bubble-card').forEach(function(card,i){setTimeout(function(){card.classList.add('visible');},i*150);});bObs.unobserve(entry.target);}});},{threshold:.2});
+  document.querySelectorAll('.bubble-container').forEach(function(el){bObs.observe(el);});
+})();
+</script>
+</body>
+</html>
